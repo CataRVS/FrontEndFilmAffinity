@@ -7,7 +7,10 @@ import { useState } from 'react';
 
 export default function Header() {
     const [showDropdown, setShowDropdown] = useState(false);
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, checkSession } = useAuth();
+
+    // Call to the server to check if we have logged in
+    checkSession();
 
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);

@@ -64,7 +64,7 @@ export default function UserProfileEdit() {
           </CardContent>
           <Divider/>
           <CardActions sx={{justifyContent: "center"}}>
-            <Button type="submit" variant="outlined" color="warning" size="small" disabled={busy}>
+          <Button type="submit" variant="contained" color="primary" size="small" disabled={busy || diffPasswords}>
               Update
             </Button>
           </CardActions>

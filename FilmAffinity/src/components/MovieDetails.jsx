@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import MovieReviewsContainer from './MovieReviews';
+import { useAuth } from '../context/AuthContext';
 
 function MovieInfo({movie}) {
     return <>
@@ -49,7 +50,7 @@ function MovieInfo({movie}) {
 
 function MovieDetails() {
   const { id } = useParams(); // Extrae el id de la URL
-  const [movie, setMovie] = useState(null);
+  const [ movie, setMovie ] = useState(null);
 
   useEffect(() => {
     const fetchMovie = async () => {

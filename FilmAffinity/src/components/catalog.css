@@ -110,7 +110,6 @@ border-radius: 3px;
 }
 
 button[type="submit"] {
-background-color: #333;
 color: #fff;
 padding: 10px 20px;
 border: none;
@@ -119,9 +118,9 @@ cursor: pointer;
 transition: background-color 0.2s ease;
 }
 
-button[type="submit"]:hover {
+/* button[type="submit"]:hover {
 background-color: #777;
-}
+} */
 
 .buttons {
 display: flex;

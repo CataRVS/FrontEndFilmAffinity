@@ -5,9 +5,9 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Divider from '@mui/material/Divider';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import { Form } from 'react-router-dom';
+import { Form, NavLink } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
 
 function Review({review}){
   return (
@@ -41,6 +41,10 @@ function ReviewList({reviews, showReviews, toggleReviews}){
 
 function CreateNewReview({newReview, setNewReview}){
   const handleChange = (event) => {
+    // Rating must be between 1 and 10
+    if (event.target.name === "rating") {
+      event.target.value = Math.min(10, Math.max(1, event.target.value));
+    }
     const {name, value} = event.target;
     setNewReview({...newReview, [name]: value});
   }
@@ -68,7 +72,7 @@ function CreateNewReview({newReview, setNewReview}){
               </Stack>
             </CardContent>
             <CardActions>
-              <Button type="submit" variant="outlined" color="warning" size="small">
+              <Button type="submit" variant="contained" color="primary" size="small">
                 Add Review
               </Button>
             </CardActions>
@@ -79,14 +83,21 @@ function CreateNewReview({newReview, setNewReview}){
   )
 }
 
-function CreateNewReviewContainer({movie,
-                                   newReview,
-                                   setNewReview}) {
+function CreateNewReviewContainer({newReview,
+                                   setNewReview,
+                                   isLoggedIn}) {
   return (
     <>
-      <h2>Add a new review</h2>
-      <br/>
-      <CreateNewReview movie={movie} newReview={newReview} setNewReview={setNewReview}/>
+      {/* If we are logged in we can create a review */}
+      { isLoggedIn ? 
+      <>
+        <h2>Add a new review</h2>
+        <CreateNewReview newReview={newReview} setNewReview={setNewReview}/>
+      </> : 
+      <>
+        <br/>
+        <NavLink to='/users/login'><Button>Login to add a review</Button></NavLink>
+      </>}
     </>
   )
 }
@@ -98,7 +109,13 @@ function MovieReviewsContainer({movie}){
   // Fetch the reviews for the movie
   const [reviews, setReviews] = useState(null);
   const [showReviews, setShowReviews] = useState(false);
-  const [newReview, setNewReview] = useState({rating: 0, comment: ""});
+  const [newReview, setNewReview] = useState({rating: 1, comment: ""});
+
+  // Get the togle triger from the context
+  const { isLoggedIn, checkSession } = useAuth();
+
+  // Force to check if we are logged in or not
+  checkSession();
 
   const toggleShowReviews = () => {
     setShowReviews(!showReviews);
@@ -133,7 +150,8 @@ function MovieReviewsContainer({movie}){
                   showReviews={showReviews}
                   toggleReviews={toggleShowReviews}/>
       <CreateNewReviewContainer newReview={newReview}
-                                setNewReview={setNewReview}/>
+                                setNewReview={setNewReview}
+                                isLoggedIn={isLoggedIn}/>
     </>
   )
 }

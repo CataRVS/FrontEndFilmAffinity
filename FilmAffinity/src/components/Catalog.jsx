@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import './catalog.css';
 
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
 
 const PAGE_SIZE = 10;
 const INITIAL_PAGE = 1;
@@ -160,6 +162,9 @@ function Catalog() {
   const [actorFilter, setActorFilter] = useState('');
   const [directorFilter, setDirectorFilter] = useState('');
   const [languageFilter, setLanguageFilter] = useState('');
+
+  const { isLoggedIn, checkSession } = useAuth();
+  checkSession()
 
   useEffect(() => {
     const fetchMovies = async () => {

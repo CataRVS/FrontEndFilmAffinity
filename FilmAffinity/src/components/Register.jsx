@@ -62,7 +62,7 @@ export default function Register() {
                   loading={busy} disabled={busy || diffPasswords}>
                     Register
                 </LoadingButton>
-                <NavLink to='/users/register' style={{width: '100%'}}>
+                <NavLink to='/users/login' style={{width: '100%'}}>
                   <Button fullWidth disabled={busy}>Sign In</Button>
                 </NavLink>
               </Stack>

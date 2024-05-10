@@ -32,6 +32,7 @@ const router = createBrowserRouter([{
       path: "/users/profile",
       element: <UserProfileInformation/>,
       loader: fetchUserProfile,
+      action: deleteProfile
     },
     {
       path: "/users/edit-profile",
@@ -82,7 +83,9 @@ async function signIn({ request }) {
 
   // django is at localhost:8000
   const loginRes = await fetch('http://localhost:8000/filmaffinity/users/login/', data);
-  if (loginRes.ok) return redirect('/movies/catalog')
+  if (loginRes.ok) {
+    return redirect('/movies/catalog');
+  }
   return {status: loginRes.status};
 }
 
@@ -95,7 +98,9 @@ async function registerUser({ request }) {
     body: JSON.stringify(user)
   };
   const registerRes = await fetch('http://localhost:8000/filmaffinity/users/', data);
-  if (registerRes.ok) return redirect('/users/login/?registered');
+  if (registerRes.ok){
+    return redirect('/users/login/');
+  }
   return {status: registerRes.status};
 }
 
@@ -172,4 +177,24 @@ async function createReview({ request }) {
   // Reload and redirect to the same page
   window.location.reload();
   return redirect(`/movies/catalog/${id}`);
+}
+
+async function deleteProfile() {
+  const data = {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'}
+  };
+
+  // Add a confirmation window
+  if (!window.confirm('Are you sure you want to delete your profile?')) {
+    return redirect('/users/profile');
+  }
+
+  const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
+  if (!response.ok){
+    throw new Error('Error deleting user profile');
+  }
+  // Redirect to login
+  return redirect('/users/login/?deleted');
 }
