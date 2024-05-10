@@ -7,14 +7,18 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { useState } from "react";
 
-// TODO: Show the email and reviews of the user
-export default function UserProfile() {
+// TODO: Show the reviews of the user
+export default function UserProfileEdit() {
   // Datos del usuario
   const user = useLoaderData();
   const navigation = useNavigation();
   const busy = navigation.state === 'submitting' ||
                navigation.state === 'loading';
+  const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
+  const diffPasswords = password !== password2;
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center"
@@ -33,6 +37,28 @@ export default function UserProfile() {
                 label="Last Name"
                 name="last_name"
                 defaultValue={user.last_name}
+              />
+              <TextField margin="dense" size="small" required fullWidth disabled={busy}
+                label="Email"
+                name="email"
+                type="email"
+                defaultValue={user.email}
+              />
+              <TextField margin="dense" size="small" required fullWidth disabled={busy}
+                label="Password"
+                name="password"
+                type="password"
+                defaultValue={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <TextField margin="dense" size="small" required fullWidth
+                label="Repeat password"
+                name="password2"
+                type="password"
+                defaultValue={password2}
+                onChange={(e) => setPassword2(e.target.value)}
+                error={diffPasswords}
+                helperText={diffPasswords && "Passwords must be the same"}
               />
             </Stack>
           </CardContent>

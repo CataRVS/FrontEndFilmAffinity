@@ -2,11 +2,17 @@ import React from 'react';
 import './App.css';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
 
 
 export default function Header() {
+    const [showDropdown, setShowDropdown] = useState(false);
     const { isLoggedIn } = useAuth();
-    // console.log(isLoggedIn);
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    }
+
     return (
         <header>
             <h1>FilmAffinity</h1>
@@ -20,8 +26,21 @@ export default function Header() {
                     </li>
                     {/* TODO: See if we put here profile or login. */}
                     {isLoggedIn && (
-                        <li>
-                            <NavLink to="/users/profile">Profile</NavLink>
+                        <li onClick={toggleDropdown}>
+                            <span>Profile</span>
+                            {showDropdown && (
+                                <ul className="dropdown-menu">
+                                    <li>
+                                        <NavLink to="/users/profile">My Profile</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to="/users/edit-profile">Edit Profile</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to="/users/reviews">My Reviews</NavLink>
+                                    </li>
+                                </ul>
+                            )}
                         </li>
                     )}
                     {!isLoggedIn && (

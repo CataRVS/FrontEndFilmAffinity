@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, redirect } from "react-router-dom";
 import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
-import UserProfile from "./components/UserProfile.jsx";
+import UserProfileEdit from "./components/UserProfileEdit.jsx";
+import UserProfileInformation from "./components/UserProfileInformation.jsx";
 import Catalog from "./components/Catalog.jsx";
 import MoreInfo from "./components/MoreInfo.jsx";
 import MovieDetails from "./components/MovieDetails.jsx";
 import App from "./components/App.jsx";
+import UserReviews from './components/UserReviews.jsx';
 import { AuthProvider } from "./context/AuthContext.jsx";
 
 
@@ -28,9 +30,19 @@ const router = createBrowserRouter([{
     },
     {
       path: "/users/profile",
-      element: <UserProfile/>,
+      element: <UserProfileInformation/>,
       loader: fetchUserProfile,
-      action: changeUserProfile
+    },
+    {
+      path: "/users/edit-profile",
+      element: <UserProfileEdit/>,
+      loader: fetchUserProfile,
+      action: changeUserProfile,
+    },
+    {
+      path: "/users/reviews",
+      element: <UserReviews/>,
+      loader: fetchUserReviews,
     },
     {
       path: "/movies/catalog",
@@ -69,7 +81,6 @@ async function signIn({ request }) {
 
   // django is at localhost:8000
   const loginRes = await fetch('http://localhost:8000/filmaffinity/users/login/', data);
-  console.log(loginRes);
   if (loginRes.ok) return redirect('/movies/catalog')
   return {status: loginRes.status};
 }
@@ -99,7 +110,24 @@ async function fetchUserProfile() {
   if (!response.ok){
     throw new Error('Error fetching user profile');
   }
-  return await response.json();
+  var data_j = await response.json();
+  return await data_j;
+}
+
+async function fetchUserReviews() {
+  const data = {
+    method: 'GET',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'}
+  };
+
+  const response = await fetch('http://localhost:8000/filmaffinity/users/ratings/', data);
+
+  if (!response.ok){
+    throw new Error('Error fetching user reviews');
+  }
+  var data_j = await response.json();
+  return await data_j;
 }
 
 async function changeUserProfile({ request }) {
@@ -116,5 +144,6 @@ async function changeUserProfile({ request }) {
   if (!response.ok){
     throw new Error('Error updating user profile');
   }
-  return await response.json();
+  // Redirect to profile
+  return redirect('/users/profile');
 }
