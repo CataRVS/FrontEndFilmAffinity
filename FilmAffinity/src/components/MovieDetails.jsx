@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-
+import MovieReviewsContainer from './MovieReviews';
 
 function MovieInfo({movie}) {
     return <>
@@ -75,9 +75,9 @@ function MovieDetails() {
   return (
     <>
       <div className="container">
-        {/* Botón para volver al listado usando NavLink*/}
         <NavLink to="/movies/catalog/" className="boton-volver">Return to Catalog</NavLink>
         <MovieInfo movie={movie}/>
+        <MovieReviewsContainer movie={movie}/>
       </div>
     </>
   );

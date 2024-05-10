@@ -42,7 +42,7 @@ const router = createBrowserRouter([{
     {
       path: "/users/reviews",
       element: <UserReviews/>,
-      loader: fetchUserReviews,
+      loader: fetchUserReviews
     },
     {
       path: "/movies/catalog",
@@ -50,7 +50,8 @@ const router = createBrowserRouter([{
     },
     {
       path: "/movies/catalog/:id",
-      element: <MovieDetails/>
+      element: <MovieDetails/>,
+      action: createReview
     },
     {
       path: "/moreInfo",
@@ -146,4 +147,29 @@ async function changeUserProfile({ request }) {
   }
   // Redirect to profile
   return redirect('/users/profile');
+}
+
+async function createReview({ request }) {
+
+  const formData = await request.formData();
+
+  // Get the movie id from the URL
+  const id = window.location.pathname.split('/').pop();
+  const review = Object.fromEntries(formData);
+  const data = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(review),
+    credentials: 'include'
+  };
+  console.log(data);
+
+  const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/rating/`, data);
+  if (!response.ok){
+    // Show a window alert
+    alert('Error creating review');
+  }
+  // Reload and redirect to the same page
+  window.location.reload();
+  return redirect(`/movies/catalog/${id}`);
 }
