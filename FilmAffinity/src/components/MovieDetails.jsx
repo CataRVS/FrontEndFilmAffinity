@@ -6,16 +6,19 @@ import { NavLink } from 'react-router-dom';
 function MovieInfo({movie}) {
     return <>
       <div className="movie-details" id="movieDetails">
-        <img src={movie.thumbnail} alt="Poster" id="poster" />
+        <img src={movie.poster} alt="Poster" id="poster" />
         <div className="info">
           <h2 id="title">{movie.title}</h2>
-          <p id="rating">{movie.rating}</p>
+          <p id="rating">
+          <strong>Rating: </strong>
+            {movie.average_rating ? parseFloat(movie.average_rating.toFixed(2)) + " / 10": "Not rated"}
+          </p>
           <p>
-            <strong>Year Released: </strong>{movie.release_date}%
+            <strong>Year Released: </strong>{movie.release_date}
             <span id="release_date" />
           </p>
           <p>
-            <strong>Duration: </strong>{movie.duration}
+            <strong>Duration: </strong>{movie.duration} minutes
             <span id="duration" />
           </p>
           <p>
@@ -23,7 +26,7 @@ function MovieInfo({movie}) {
             <span id="language" />
           </p>
           <p>
-            <strong>Genre: </strong>{product.genre}
+            <strong>Genre: </strong>{movie.genres.map(genre => genre).join(', ')}
             <span id="genres" />
           </p>
           <p>
@@ -31,11 +34,11 @@ function MovieInfo({movie}) {
             <span id="director" />
           </p>
           <p>
-            <strong>Actors: </strong>{movie.actors}
+            <strong>Actors: </strong>{movie.actors.map(actor => actor).join(', ')}
             <span id="actors" />
           </p>
           <p>
-            <strong>Synopsis: </strong>{movie.synopsis}$
+            <strong>Synopsis: </strong>{movie.synopsis}
             <span id="synopsis" />
           </p>
         </div>
@@ -51,7 +54,7 @@ function MovieDetails() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`https://dummyjson.com/products/${id}`);
+        const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`);
         if (!response.ok) {
           throw new Error('It was not possible to obtain the movie details');
         }
