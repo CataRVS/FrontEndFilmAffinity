@@ -11,16 +11,28 @@ var total_products = 16;
 function ListCatalog({movieList,
                       currentPage,
                       setCurrentPage,
+                      titleFilter,
+                      setTitleFilter,
                       ratingFilter,
                       setRatingFilter,
                       genreFilter,
-                      setGenreFilter}){
+                      setGenreFilter,
+                      synopsisFilter,
+                      setSynopsisFilter,
+                      actorFilter,
+                      setActorFilter,
+                      directorFilter,
+                      setDirectorFilter}){
   return <>
     <div className="container">
       <h2>Movie Catalog</h2>
       <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+      <FilterTitle titleFilter={titleFilter} setTitleFilter={setTitleFilter}/>
       <FilterRating ratingFilter={ratingFilter} setRatingFilter={setRatingFilter}/>
       <FilterGenre genreFilter={genreFilter} setGenreFilter={setGenreFilter}/>
+      <FilterSynopsis synopsisFilter={synopsisFilter} setSynopsisFilter={setSynopsisFilter}/>
+      <FilterActor actorFilter={actorFilter} setActorFilter={setActorFilter}/>
+      <FilterDirector directorFilter={directorFilter} setDirectorFilter={setDirectorFilter}/>
       <MovieList movieList={movieList}/>
     </div>
   </>
@@ -41,17 +53,30 @@ function PageFilter({currentPage, setCurrentPage}) {
   </>
 }
 
+function FilterTitle({titleFilter, setTitleFilter}){
+  function changeFilter(e){
+    setTitleFilter(e);
+  }
+  return <>
+    <br/>
+    <label htmlFor="titleFilter">Filter by Title: </label>
+    <input type="text" value={titleFilter} onChange={(e) => changeFilter(e.target.value)}/>
+  </>
+}
 
 function FilterRating({ratingFilter, setRatingFilter}){
   function changeFilter(e){
     // If the input is empty, set the filter to 0
     // The rating cannot be bigger than 10
-    setRatingFilter(Math.min(10, Math.max(0, e)));
+    setRatingFilter(e === '' ? 0 : Math.min(10, Math.max(0, parseFloat(e))));
   }
   return <>
     <br/>
     <label htmlFor="ratingFilter">Filter by Rating: </label>
-    <input type="number" value={ratingFilter} onChange={(e) => changeFilter(e.target.value)}/>
+    <input type="number"
+           value={ratingFilter === 0 ? '' : ratingFilter}
+           onChange={(e) => changeFilter(e.target.value)}/>
+    
   </>
 }
 
@@ -63,6 +88,39 @@ function FilterGenre({genreFilter, setGenreFilter}){
     <br/>
     <label htmlFor="genreFilter">Filter by Genre: </label>
     <input type="text" value={genreFilter} onChange={(e) => changeFilter(e.target.value)}/>
+  </>
+}
+
+function FilterSynopsis({synopsisFilter, setSynopsisFilter}){
+  function changeFilter(e){
+    setSynopsisFilter(e);
+  }
+  return <>
+    <br/>
+    <label htmlFor="synopsisFilter">Filter by Synopsis: </label>
+    <input type="text" value={synopsisFilter} onChange={(e) => changeFilter(e.target.value)}/>
+  </>
+}
+
+function FilterActor({actorFilter, setActorFilter}){
+  function changeFilter(e){
+    setActorFilter(e);
+  }
+  return <>
+    <br/>
+    <label htmlFor="actorFilter">Filter by Actor: </label>
+    <input type="text" value={actorFilter} onChange={(e) => changeFilter(e.target.value)}/>
+  </>
+}
+
+function FilterDirector({directorFilter, setDirectorFilter}){
+  function changeFilter(e){
+    setDirectorFilter(e);
+  }
+  return <>
+    <br/>
+    <label htmlFor="directorFilter">Filter by Director: </label>
+    <input type="text" value={directorFilter} onChange={(e) => changeFilter(e.target.value)}/>
   </>
 }
 
@@ -103,8 +161,12 @@ function MovieList({movieList = []}) {
 function Catalog() {
   const [movieList, setMovieList] = useState([]);
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [titleFilter, setTitleFilter] = useState('');
   const [ratingFilter, setRatingFilter] = useState(0);
   const [genreFilter, setGenreFilter] = useState('');
+  const [synopsisFilter, setSynopsisFilter] = useState('');
+  const [actorFilter, setActorFilter] = useState('');
+  const [directorFilter, setDirectorFilter] = useState('');
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -114,6 +176,12 @@ function Catalog() {
         page: currentPage,
         page_size: PAGE_SIZE,
       });
+
+      // If the title filter is not empty, include it in the parameters
+      // The database will filter the movies with the title
+      if (titleFilter !== '') {
+        params.append('title', titleFilter);
+      }
 
       // If the rating filter is greater than 0, include it in the parameters
       // The database will filter the movies with a rating greater than the filter
@@ -127,6 +195,24 @@ function Catalog() {
         params.append('genre', genreFilter);
       }
 
+      // If the synopsis filter is not empty, include it in the parameters
+      // The database will filter the movies with the synopsis
+      if (synopsisFilter !== '') {
+        params.append('synopsis', synopsisFilter);
+      }
+
+      // If the actor filter is not empty, include it in the parameters
+      // The database will filter the movies with the actor
+      if (actorFilter !== '') {
+        params.append('actor', actorFilter);
+      }
+
+      // If the director filter is not empty, include it in the parameters
+      // The database will filter the movies with the director
+      if (directorFilter !== '') {
+        params.append('director', directorFilter);
+      }
+
       try {
         const response = await fetch(`http://localhost:8000/filmaffinity/movies/?${params.toString()}`);
         if (!response.ok) {
@@ -135,7 +221,6 @@ function Catalog() {
 
         const data = await response.json();
         total_products = data.count;
-        console.log(data.results);
         setMovieList(data.results);
       } catch (error) {
         console.error('Error retrieving movies: ', error);
@@ -143,16 +228,30 @@ function Catalog() {
     };
 
     fetchMovies();
-  }, [currentPage, ratingFilter, genreFilter]);
+  }, [currentPage,
+      titleFilter,
+      ratingFilter,
+      genreFilter,
+      synopsisFilter,
+      actorFilter,
+      directorFilter]);
 
   return (
       <ListCatalog movieList={movieList} 
                    currentPage={currentPage} 
                    setCurrentPage={setCurrentPage}
+                   titleFilter={titleFilter}
+                   setTitleFilter={setTitleFilter}
                    ratingFilter={ratingFilter} 
                    setRatingFilter={setRatingFilter}
                    genreFilter={genreFilter}
                    setGenreFilter={setGenreFilter}
+                   synopsisFilter={synopsisFilter}
+                   setSynopsisFilter={setSynopsisFilter}
+                   actorFilter={actorFilter}
+                   setActorFilter={setActorFilter}
+                   directorFilter={directorFilter}
+                   setDirectorFilter={setDirectorFilter}
                    />
   );
 }
