@@ -12,7 +12,7 @@ export default function Login() {
   const navigation = useNavigation();
   const busy = (navigation.state === 'submitting' || navigation.state === 'loading');
   const credIncorrectas = !busy && responseError;
-  const registrado = useLocation().search === '?registered';
+  const registered = useLocation().search === '?registered';
 
   return (
     <>
@@ -34,7 +34,7 @@ export default function Login() {
               />
               {credIncorrectas && <Alert severity="error" sx={{ mt: 1, width: '100%', py:0 }}>
                 Incorrect Credentials, try again</Alert>}
-              {registrado && <Alert variant="outlined" severity="success" sx={{ mt: 1, width: '100%' }}>
+              {registered && <Alert variant="outlined" severity="success" sx={{ mt: 1, width: '100%' }}>
               Everything is ready! Sign In
               </Alert>}
               <LoadingButton type="submit" variant="contained" fullWidth sx={{ mt: 2, mb: 1 }} 

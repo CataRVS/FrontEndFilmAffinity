@@ -29,6 +29,42 @@ function ListCatalog({movieList,
     <div className="container">
       <h2>Movie Catalog</h2>
       <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+      <FilterList titleFilter={titleFilter}
+                  setTitleFilter={setTitleFilter}
+                  ratingFilter={ratingFilter}
+                  setRatingFilter={setRatingFilter}
+                  genreFilter={genreFilter}
+                  setGenreFilter={setGenreFilter}
+                  synopsisFilter={synopsisFilter}
+                  setSynopsisFilter={setSynopsisFilter}
+                  actorFilter={actorFilter}
+                  setActorFilter={setActorFilter}
+                  directorFilter={directorFilter}
+                  setDirectorFilter={setDirectorFilter}
+                  languageFilter={languageFilter}
+                  setLanguageFilter={setLanguageFilter}/>
+      <br/>
+      <MovieList movieList={movieList}/>
+    </div>
+  </>
+}
+
+
+function FilterList({titleFilter,
+                      setTitleFilter,
+                      ratingFilter,
+                      setRatingFilter,
+                      genreFilter,
+                      setGenreFilter,
+                      synopsisFilter,
+                      setSynopsisFilter,
+                      actorFilter,
+                      setActorFilter,
+                      directorFilter,
+                      setDirectorFilter,
+                      languageFilter,
+                      setLanguageFilter,}) {
+  return <>
       <MovieFilter filterName="Title" movieFilter={titleFilter} setMovieFilter={setTitleFilter}/>
       <MovieFilter filterName="Rating" movieFilter={ratingFilter} setMovieFilter={setRatingFilter}/>
       <MovieFilter filterName="Genre" movieFilter={genreFilter} setMovieFilter={setGenreFilter}/>
@@ -36,10 +72,9 @@ function ListCatalog({movieList,
       <MovieFilter filterName="Actor" movieFilter={actorFilter} setMovieFilter={setActorFilter}/>
       <MovieFilter filterName="Director" movieFilter={directorFilter} setMovieFilter={setDirectorFilter}/>
       <MovieFilter filterName="Language" movieFilter={languageFilter} setMovieFilter={setLanguageFilter}/>
-      <MovieList movieList={movieList}/>
-    </div>
-  </>
+    </>
 }
+
 
 function PageFilter({currentPage, setCurrentPage}) {
   function changePage(page){
@@ -128,57 +163,18 @@ function Catalog() {
 
   useEffect(() => {
     const fetchMovies = async () => {
-
-      // Create a Parameters object to include the page and page_size
-      const params = new URLSearchParams({
-        page: currentPage,
-        page_size: PAGE_SIZE,
-      });
-
-      // If the title filter is not empty, include it in the parameters
-      // The database will filter the movies with the title
-      if (titleFilter !== '') {
-        params.append('title', titleFilter);
-      }
-
-      // If the rating filter is greater than 0, include it in the parameters
-      // The database will filter the movies with a rating greater than the filter
-      if (ratingFilter > 0) {
-        params.append('rating', ratingFilter);
-      }
-
-      // If the genre filter is not empty, include it in the parameters
-      // The database will filter the movies with the genre
-      if (genreFilter !== '') {
-        params.append('genre', genreFilter);
-      }
-
-      // If the synopsis filter is not empty, include it in the parameters
-      // The database will filter the movies with the synopsis
-      if (synopsisFilter !== '') {
-        params.append('synopsis', synopsisFilter);
-      }
-
-      // If the actor filter is not empty, include it in the parameters
-      // The database will filter the movies with the actor
-      if (actorFilter !== '') {
-        params.append('actor', actorFilter);
-      }
-
-      // If the director filter is not empty, include it in the parameters
-      // The database will filter the movies with the director
-      if (directorFilter !== '') {
-        params.append('director', directorFilter);
-      }
-
-      // If the language filter is not empty, include it in the parameters
-      // The database will filter the movies with the language
-      if (languageFilter !== '') {
-        params.append('language', languageFilter);
-      }
-
+      const filters = new Filters();
+      filters.setFilter('page', currentPage);
+      filters.setFilter('page_size', PAGE_SIZE);
+      filters.setFilter('title', titleFilter);
+      filters.setFilter('rating', ratingFilter);
+      filters.setFilter('genre', genreFilter);
+      filters.setFilter('synopsis', synopsisFilter);
+      filters.setFilter('actor', actorFilter);
+      filters.setFilter('director', directorFilter);
+      filters.setFilter('language', languageFilter);
       try {
-        const response = await fetch(`http://localhost:8000/filmaffinity/movies/?${params.toString()}`);
+        const response = await fetch(`http://localhost:8000/filmaffinity/movies/?${filters.getParams().toString()}`);
         if (!response.ok) {
           throw new Error("We couldn't retrieve the movies");
         }
@@ -200,27 +196,44 @@ function Catalog() {
       actorFilter,
       directorFilter,
       languageFilter]);
+    
+      return (
+        <ListCatalog movieList={movieList} 
+                     currentPage={currentPage} 
+                     setCurrentPage={setCurrentPage}
+                     titleFilter={titleFilter}
+                     setTitleFilter={setTitleFilter}
+                     ratingFilter={ratingFilter} 
+                     setRatingFilter={setRatingFilter}
+                     genreFilter={genreFilter}
+                     setGenreFilter={setGenreFilter}
+                     synopsisFilter={synopsisFilter}
+                     setSynopsisFilter={setSynopsisFilter}
+                     actorFilter={actorFilter}
+                     setActorFilter={setActorFilter}
+                     directorFilter={directorFilter}
+                     setDirectorFilter={setDirectorFilter}
+                     languageFilter={languageFilter}
+                     setLanguageFilter={setLanguageFilter}
+        />
+      );
+    }
 
-  return (
-      <ListCatalog movieList={movieList} 
-                   currentPage={currentPage} 
-                   setCurrentPage={setCurrentPage}
-                   titleFilter={titleFilter}
-                   setTitleFilter={setTitleFilter}
-                   ratingFilter={ratingFilter} 
-                   setRatingFilter={setRatingFilter}
-                   genreFilter={genreFilter}
-                   setGenreFilter={setGenreFilter}
-                   synopsisFilter={synopsisFilter}
-                   setSynopsisFilter={setSynopsisFilter}
-                   actorFilter={actorFilter}
-                   setActorFilter={setActorFilter}
-                   directorFilter={directorFilter}
-                   setDirectorFilter={setDirectorFilter}
-                   languageFilter={languageFilter}
-                   setLanguageFilter={setLanguageFilter}
-                   />
-  );
+
+class Filters {
+  constructor() {
+    this.params = new URLSearchParams();
+  }
+
+  setFilter(key, value) {
+    if (value !== '' && value !== 0) {
+      this.params.set(key, value);
+    }
+  }
+
+  getParams() {
+    return this.params;
+  }
 }
 
 export default Catalog;

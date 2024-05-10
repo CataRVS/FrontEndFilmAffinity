@@ -26,13 +26,12 @@ export default function Register() {
               <Stack direction="column" justifyContent="center" alignItems="center">
                 <AccountBoxIcon color="action" sx={{ fontSize: 40, mb: 2 }}/>
                 <TextField margin="dense" size="small" required fullWidth disabled={busy}
-                  label="Name"
-                  name="name"
+                  label="first_name"
+                  name="first_name"
                 />
                 <TextField margin="dense" size="small" required fullWidth disabled={busy}
-                  label="Phone Number"
-                  name="tel"
-                  type="tel"
+                  label="last_name"
+                  name="last_name"
                 />
                 <TextField margin="dense" size="small" required fullWidth disabled={busy}
                   label="Email"

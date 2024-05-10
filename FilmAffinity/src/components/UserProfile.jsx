@@ -11,7 +11,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 // TODO: Show the email and reviews of the user
 export default function UserProfile() {
   // Datos del usuario
-  const usuario = useLoaderData();
+  const user = useLoaderData();
   const navigation = useNavigation();
   const busy = navigation.state === 'submitting' ||
                navigation.state === 'loading';
@@ -19,35 +19,27 @@ export default function UserProfile() {
   return (
     <Stack direction="row" justifyContent="center" alignItems="center"
       sx={{ width: 1, p: 4 }}>
-      {/* Tarjeta centrada horizontalmente */} 
       <Card variant="outlined" sx={{minWidth: '15%'}}>
-        {/* Acción de React Router para actualizar el perfil */}
         <Form method="put">
           <CardContent>
-            {/* Elementos del formulario apilados verticalmente */} 
             <Stack direction="column" justifyContent="center" alignItems="center">
               <AccountBoxIcon color="action" sx={{ fontSize: 40, mb: 2 }}/>
-              {/* Campos del perfil: nombre, teléfono, password, password2 */}
               <TextField margin="dense" size="small" required fullWidth disabled={busy}
-                label="Nombre"
-                name="nombre"
-                defaultValue={usuario.nombre}
+                label="First Name"
+                name="first_name"
+                defaultValue={user.first_name}
               />
               <TextField margin="dense" size="small" required fullWidth disabled={busy}
-                label="Teléfono"
-                name="tel"
-                type="tel"
-                defaultValue={usuario.tel}
+                label="Last Name"
+                name="last_name"
+                defaultValue={user.last_name}
               />
-              {/* ToDo#10: añade los campos necesarios para implementar el cambio de contraseña */}
-
             </Stack>
           </CardContent>
           <Divider/>
           <CardActions sx={{justifyContent: "center"}}>
-            {/* Botón para enviar los datos del usuario */}
             <Button type="submit" variant="outlined" color="warning" size="small" disabled={busy}>
-              Actualizar
+              Update
             </Button>
           </CardActions>
         </Form>
