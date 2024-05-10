@@ -22,17 +22,20 @@ function ListCatalog({movieList,
                       actorFilter,
                       setActorFilter,
                       directorFilter,
-                      setDirectorFilter}){
+                      setDirectorFilter,
+                      languageFilter,
+                      setLanguageFilter,}){
   return <>
     <div className="container">
       <h2>Movie Catalog</h2>
       <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
-      <FilterTitle titleFilter={titleFilter} setTitleFilter={setTitleFilter}/>
-      <FilterRating ratingFilter={ratingFilter} setRatingFilter={setRatingFilter}/>
-      <FilterGenre genreFilter={genreFilter} setGenreFilter={setGenreFilter}/>
-      <FilterSynopsis synopsisFilter={synopsisFilter} setSynopsisFilter={setSynopsisFilter}/>
-      <FilterActor actorFilter={actorFilter} setActorFilter={setActorFilter}/>
-      <FilterDirector directorFilter={directorFilter} setDirectorFilter={setDirectorFilter}/>
+      <MovieFilter filterName="Title" movieFilter={titleFilter} setMovieFilter={setTitleFilter}/>
+      <MovieFilter filterName="Rating" movieFilter={ratingFilter} setMovieFilter={setRatingFilter}/>
+      <MovieFilter filterName="Genre" movieFilter={genreFilter} setMovieFilter={setGenreFilter}/>
+      <MovieFilter filterName="Synopsis" movieFilter={synopsisFilter} setMovieFilter={setSynopsisFilter}/>
+      <MovieFilter filterName="Actor" movieFilter={actorFilter} setMovieFilter={setActorFilter}/>
+      <MovieFilter filterName="Director" movieFilter={directorFilter} setMovieFilter={setDirectorFilter}/>
+      <MovieFilter filterName="Language" movieFilter={languageFilter} setMovieFilter={setLanguageFilter}/>
       <MovieList movieList={movieList}/>
     </div>
   </>
@@ -53,76 +56,30 @@ function PageFilter({currentPage, setCurrentPage}) {
   </>
 }
 
-function FilterTitle({titleFilter, setTitleFilter}){
+function MovieFilter({filterName, movieFilter, setMovieFilter}){
   function changeFilter(e){
-    setTitleFilter(e);
-  }
-  return <>
-    <br/>
-    <label htmlFor="titleFilter">Filter by Title: </label>
-    <input type="text" value={titleFilter} onChange={(e) => changeFilter(e.target.value)}/>
-  </>
-}
 
-function FilterRating({ratingFilter, setRatingFilter}){
-  function changeFilter(e){
-    // If the input is empty, set the filter to 0
-    // The rating cannot be bigger than 10
-    setRatingFilter(e === '' ? 0 : Math.min(10, Math.max(0, parseFloat(e))));
+    if (filterName === "Rating") {
+      // If the input is empty, set the filter to 0
+      // The rating cannot be bigger than 10
+      setMovieFilter(e === '' ? 0 : Math.min(10, Math.max(0, parseFloat(e))));
+    }
+    else {
+      setMovieFilter(e);
+    }
   }
   return <>
     <br/>
-    <label htmlFor="ratingFilter">Filter by Rating: </label>
-    <input type="number"
-           value={ratingFilter === 0 ? '' : ratingFilter}
+    <label htmlFor={filterName}>Filter by {filterName}: </label>
+    {/* If the filter is a number, the input will be a number */}
+    {/* If the filter is not a number, the input will be a text */}
+    <input type={filterName === "Rating" ? "number" : "text"} 
+           value={movieFilter === 0 ? '' : movieFilter} 
            onChange={(e) => changeFilter(e.target.value)}/>
     
   </>
 }
 
-function FilterGenre({genreFilter, setGenreFilter}){
-  function changeFilter(e){
-    setGenreFilter(e);
-  }
-  return <>
-    <br/>
-    <label htmlFor="genreFilter">Filter by Genre: </label>
-    <input type="text" value={genreFilter} onChange={(e) => changeFilter(e.target.value)}/>
-  </>
-}
-
-function FilterSynopsis({synopsisFilter, setSynopsisFilter}){
-  function changeFilter(e){
-    setSynopsisFilter(e);
-  }
-  return <>
-    <br/>
-    <label htmlFor="synopsisFilter">Filter by Synopsis: </label>
-    <input type="text" value={synopsisFilter} onChange={(e) => changeFilter(e.target.value)}/>
-  </>
-}
-
-function FilterActor({actorFilter, setActorFilter}){
-  function changeFilter(e){
-    setActorFilter(e);
-  }
-  return <>
-    <br/>
-    <label htmlFor="actorFilter">Filter by Actor: </label>
-    <input type="text" value={actorFilter} onChange={(e) => changeFilter(e.target.value)}/>
-  </>
-}
-
-function FilterDirector({directorFilter, setDirectorFilter}){
-  function changeFilter(e){
-    setDirectorFilter(e);
-  }
-  return <>
-    <br/>
-    <label htmlFor="directorFilter">Filter by Director: </label>
-    <input type="text" value={directorFilter} onChange={(e) => changeFilter(e.target.value)}/>
-  </>
-}
 
 function Movie({movie}) {
   return <>
@@ -167,6 +124,7 @@ function Catalog() {
   const [synopsisFilter, setSynopsisFilter] = useState('');
   const [actorFilter, setActorFilter] = useState('');
   const [directorFilter, setDirectorFilter] = useState('');
+  const [languageFilter, setLanguageFilter] = useState('');
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -213,6 +171,12 @@ function Catalog() {
         params.append('director', directorFilter);
       }
 
+      // If the language filter is not empty, include it in the parameters
+      // The database will filter the movies with the language
+      if (languageFilter !== '') {
+        params.append('language', languageFilter);
+      }
+
       try {
         const response = await fetch(`http://localhost:8000/filmaffinity/movies/?${params.toString()}`);
         if (!response.ok) {
@@ -234,7 +198,8 @@ function Catalog() {
       genreFilter,
       synopsisFilter,
       actorFilter,
-      directorFilter]);
+      directorFilter,
+      languageFilter]);
 
   return (
       <ListCatalog movieList={movieList} 
@@ -252,6 +217,8 @@ function Catalog() {
                    setActorFilter={setActorFilter}
                    directorFilter={directorFilter}
                    setDirectorFilter={setDirectorFilter}
+                   languageFilter={languageFilter}
+                   setLanguageFilter={setLanguageFilter}
                    />
   );
 }
