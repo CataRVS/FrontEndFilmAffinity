@@ -72,14 +72,14 @@ function CreateNewReview({newReview, setNewReview, hasReviewed}){
                 />
               </Stack>
             </CardContent>
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'center' }}>
               <Button type="submit" variant="contained" color="primary" size="small">
                 {hasReviewed ? "Edit Review" : "Add Review"}
               </Button>
             </CardActions>
           </Form>
           <Form method="delete">
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'center' }}>
               <Button type="submit" variant="contained" color="error" size="small">
                 Delete Review
               </Button>
