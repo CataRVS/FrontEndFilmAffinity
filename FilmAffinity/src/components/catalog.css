@@ -68,6 +68,10 @@ display: flex;
 margin-top: 20px;
 }
 
+#title {
+    text-transform: capitalize;
+}
+
 img {
 width: 200px;
 height: auto;

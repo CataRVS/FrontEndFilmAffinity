@@ -16,7 +16,7 @@ function Review({review}){
         <br/>
         <strong>Rating: </strong>{review.rating}
         <br/>
-        <strong>Review: </strong>{review.comment}
+        {review.comment !== "" && <><strong>Review: </strong>{review.comment}</>}
       </div>
   )
 }
@@ -39,7 +39,7 @@ function ReviewList({reviews, showReviews, toggleReviews}){
 }
 
 
-function CreateNewReview({newReview, setNewReview}){
+function CreateNewReview({newReview, setNewReview, hasReviewed}){
   const handleChange = (event) => {
     // Rating must be between 1 and 10
     if (event.target.name === "rating") {
@@ -49,11 +49,12 @@ function CreateNewReview({newReview, setNewReview}){
     setNewReview({...newReview, [name]: value});
   }
 
+
   return (
     <>
       <Stack direction="row" justifyContent="center" alignItems="center">
         <Card variant="outlined" sx={{minWidth: '15%'}}>
-          <Form method="put">
+          <Form method={hasReviewed ? "put" : "post"}>
             <CardContent>
               <Stack direction="column" justifyContent="center" alignItems="center">
                 <TextField margin="dense" size="small" required fullWidth
@@ -73,7 +74,14 @@ function CreateNewReview({newReview, setNewReview}){
             </CardContent>
             <CardActions>
               <Button type="submit" variant="contained" color="primary" size="small">
-                Add Review
+                {hasReviewed ? "Edit Review" : "Add Review"}
+              </Button>
+            </CardActions>
+          </Form>
+          <Form method="delete">
+            <CardActions>
+              <Button type="submit" variant="contained" color="error" size="small">
+                Delete Review
               </Button>
             </CardActions>
           </Form>
@@ -85,14 +93,15 @@ function CreateNewReview({newReview, setNewReview}){
 
 function CreateNewReviewContainer({newReview,
                                    setNewReview,
-                                   isLoggedIn}) {
+                                   isLoggedIn,
+                                   hasReviewed}) {
   return (
     <>
       {/* If we are logged in we can create a review */}
       { isLoggedIn ? 
       <>
         <h2>Add a new review</h2>
-        <CreateNewReview newReview={newReview} setNewReview={setNewReview}/>
+        <CreateNewReview newReview={newReview} setNewReview={setNewReview} hasReviewed={hasReviewed}/>
       </> : 
       <>
         <br/>
@@ -102,6 +111,26 @@ function CreateNewReviewContainer({newReview,
   )
 }
 
+async function fetchUserReview(movieId, isLoggedIn) {
+  const data = {
+    method: 'GET',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'}
+  };
+  if (!isLoggedIn) {
+    return {rating: 1, comment: "", hasReviewed: false};
+  }
+  const response = await fetch(`http://localhost:8000/filmaffinity/movies/${movieId}/rating/user-rating/`, data);
+  if (response.status === 404) {
+    return {rating: 1, comment: "", hasReviewed: false};
+  }
+  if (!response.ok){
+    throw new Error('Error fetching user review');
+  }
+  var data_j = await response.json();
+  data_j.hasReviewed = true;
+  return data_j;
+}
 
 
 function MovieReviewsContainer({movie}){
@@ -110,6 +139,7 @@ function MovieReviewsContainer({movie}){
   const [reviews, setReviews] = useState(null);
   const [showReviews, setShowReviews] = useState(false);
   const [newReview, setNewReview] = useState({rating: 1, comment: ""});
+  const [hasReviewed, setHasReviewed] = useState(false);
 
   // Get the togle triger from the context
   const { isLoggedIn, checkSession } = useAuth();
@@ -129,19 +159,29 @@ function MovieReviewsContainer({movie}){
           throw new Error('It was not possible to obtain the reviews');
         }
         const data = await response.json();
-        console.log(data);
         setReviews(data); // Update the state with the reviews
       } catch (error) {
         console.error('Error while requesting movie reviews:', error);
       }
     };
+    const fetchInitialReview = async () => {
+      try {
+        const initialReview = await fetchUserReview(movie.id, isLoggedIn);
+        setHasReviewed(initialReview.hasReviewed);
+        setNewReview({rating: initialReview['rating'], comment: initialReview['comment']});
+      } catch (error) {
+        console.error('Error while fetching initial user review:', error);
+      }
+    };
 
     fetchReviews();
+    fetchInitialReview();
   }, [movie.id]); // This effect will run every time the movie id changes
 
   if (!reviews) {
     return <div>Loading...</div>; // Show a loading message or a spinner
   }
+
 
   return (
     <>
@@ -151,7 +191,8 @@ function MovieReviewsContainer({movie}){
                   toggleReviews={toggleShowReviews}/>
       <CreateNewReviewContainer newReview={newReview}
                                 setNewReview={setNewReview}
-                                isLoggedIn={isLoggedIn}/>
+                                isLoggedIn={isLoggedIn}
+                                hasReviewed={hasReviewed}/>
     </>
   )
 }

@@ -191,21 +191,38 @@ async function fetchUserReviews() {
 }
 
 async function createReview({ request }) {
-
   const formData = await request.formData();
-
   // Get the movie id from the URL
   const id = window.location.pathname.split('/').pop();
   const review = Object.fromEntries(formData);
-  const data = {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(review),
-    credentials: 'include'
-  };
-  console.log(data);
 
-  const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/rating/`, data);
+  if (request.method === 'POST') {
+    review['movie'] = id;
+    const data = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(review),
+      credentials: 'include'
+    };
+    var response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/rating/`, data);
+  }
+  else if (request.method === 'PUT') {
+    const data = {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(review),
+      credentials: 'include'
+    };
+    var response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/rating/user-rating/`, data);
+  }
+  else {
+    const data = {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      credentials: 'include'
+    };
+    var response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/rating/user-rating/`, data);
+  }
   if (!response.ok){
     // Show a window alert
     alert('Error creating review');

@@ -20,7 +20,6 @@ function Information() {
         <>
         <h2>¿Quiénes somos?</h2>
             <div className="info">
-            <h2 id="title" />
             <p>
                 Somos una tienda fundada en 2024 dedicada a la venta minorista de
                 productos tecnológicos a buen precio.
