@@ -12,9 +12,11 @@ function UserInfo({user}) {
       <h1>{user.first_name} {user.last_name}</h1>
       <strong>Email: </strong>{user.email}
       <br/>
+      <br/>
       <Button variant="contained" href="/users/edit-profile">Edit</Button>
-      <Form method="post">
-        <Button variant="contained" type="submit" color="error">Delete Account</Button>
+      <p></p>
+      <Form method="delete">
+          <Button variant="contained" type="submit" color="error">Log Out</Button>
       </Form>
     </div>
   )

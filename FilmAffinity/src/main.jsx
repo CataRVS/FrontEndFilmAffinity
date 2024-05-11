@@ -32,13 +32,13 @@ const router = createBrowserRouter([{
       path: "/users/profile",
       element: <UserProfileInformation/>,
       loader: fetchUserProfile,
-      action: deleteProfile
+      action: logoutUser
     },
     {
       path: "/users/edit-profile",
       element: <UserProfileEdit/>,
       loader: fetchUserProfile,
-      action: changeUserProfile,
+      action: actionUserProfile,
     },
     {
       path: "/users/reviews",
@@ -120,6 +120,60 @@ async function fetchUserProfile() {
   return await data_j;
 }
 
+async function logoutUser() {
+  const data = {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'}
+  };
+
+  const response = await fetch('http://localhost:8000/filmaffinity/users/logout/', data);
+
+  if (!response.ok){
+    throw new Error('Error logging out');
+  }
+  return redirect('/users/login/');
+}
+
+async function actionUserProfile({ request }) {
+  if (request.method === 'DELETE') {
+    const data = {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'}
+    };
+  
+    // Add a confirmation window
+    if (!window.confirm('Are you sure you want to delete your profile?')) {
+      return redirect('/users/profile');
+    }
+  
+    const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
+    if (!response.ok){
+      throw new Error('Error deleting user profile');
+    }
+    // Redirect to login
+    return redirect('/users/login/?deleted');
+  }
+  else {
+    const formData = await request.formData();
+    const user = Object.fromEntries(formData);
+    const data = {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(user),
+      credentials: 'include'
+    };
+
+    const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
+    if (!response.ok){
+      throw new Error('Error updating user profile');
+    }
+    // Redirect to profile
+    return redirect('/users/profile');
+  }
+}
+
 async function fetchUserReviews() {
   const data = {
     method: 'GET',
@@ -134,24 +188,6 @@ async function fetchUserReviews() {
   }
   var data_j = await response.json();
   return await data_j;
-}
-
-async function changeUserProfile({ request }) {
-  const formData = await request.formData();
-  const user = Object.fromEntries(formData);
-  const data = {
-    method: 'PUT',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(user),
-    credentials: 'include'
-  };
-
-  const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
-  if (!response.ok){
-    throw new Error('Error updating user profile');
-  }
-  // Redirect to profile
-  return redirect('/users/profile');
 }
 
 async function createReview({ request }) {
@@ -177,24 +213,4 @@ async function createReview({ request }) {
   // Reload and redirect to the same page
   window.location.reload();
   return redirect(`/movies/catalog/${id}`);
-}
-
-async function deleteProfile() {
-  const data = {
-    method: 'DELETE',
-    credentials: 'include',
-    headers: {'Content-Type': 'application/json'}
-  };
-
-  // Add a confirmation window
-  if (!window.confirm('Are you sure you want to delete your profile?')) {
-    return redirect('/users/profile');
-  }
-
-  const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
-  if (!response.ok){
-    throw new Error('Error deleting user profile');
-  }
-  // Redirect to login
-  return redirect('/users/login/?deleted');
 }

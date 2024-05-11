@@ -64,11 +64,15 @@ export default function UserProfileEdit() {
           </CardContent>
           <Divider/>
           <CardActions sx={{justifyContent: "center"}}>
-          <Button type="submit" variant="contained" color="primary" size="small" disabled={busy || diffPasswords}>
+            <Button type="submit" variant="contained" color="primary" size="small" disabled={busy || diffPasswords}>
               Update
             </Button>
           </CardActions>
         </Form>
+        <Form method="delete">
+            <Button variant="contained" type="submit" color="error">Delete Account</Button>
+        </Form>
+        <br/>
       </Card>
     </Stack>
     );
