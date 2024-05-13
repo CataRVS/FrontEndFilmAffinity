@@ -30,7 +30,7 @@ function UserProfileInformation() {
   const busy = navigation.state === 'submitting' ||
                navigation.state === 'loading';
 
-  const { isLoggedIn, checkSession } = useAuth();
+  const { isLoggedIn, isAdmin, checkSession } = useAuth();
   checkSession();
   return (
     <>

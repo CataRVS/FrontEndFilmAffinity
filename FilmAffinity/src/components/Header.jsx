@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 export default function Header() {
     const [showDropdown, setShowDropdown] = useState(false);
-    const { isLoggedIn, checkSession } = useAuth();
+    const { isLoggedIn, isAdmin, checkSession } = useAuth();
 
     // Call to the server to check if we have logged in
     checkSession();

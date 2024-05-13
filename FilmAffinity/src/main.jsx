@@ -11,6 +11,7 @@ import MovieDetails from "./components/MovieDetails.jsx";
 import App from "./components/App.jsx";
 import UserReviews from './components/UserReviews.jsx';
 import { AuthProvider } from "./context/AuthContext.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
 
 
 // Configuración de rutas y componentes
@@ -30,19 +31,19 @@ const router = createBrowserRouter([{
     },
     {
       path: "/users/profile",
-      element: <UserProfileInformation/>,
+      element: <PrivateRoute><UserProfileInformation/></PrivateRoute>,
       loader: fetchUserProfile,
       action: logoutUser
     },
     {
       path: "/users/edit-profile",
-      element: <UserProfileEdit/>,
+      element: <PrivateRoute><UserProfileEdit/></PrivateRoute>,
       loader: fetchUserProfile,
       action: actionUserProfile,
     },
     {
       path: "/users/reviews",
-      element: <UserReviews/>,
+      element: <PrivateRoute><UserReviews/></PrivateRoute>,
       loader: fetchUserReviews
     },
     {
@@ -105,6 +106,7 @@ async function registerUser({ request }) {
 }
 
 async function fetchUserProfile() {
+  // Check if the user is logged in using authProvider
   const data = {
     method: 'GET',
     credentials: 'include',
@@ -114,7 +116,8 @@ async function fetchUserProfile() {
   const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
 
   if (!response.ok){
-    throw new Error('Error fetching user profile');
+    // throw new Error('Error fetching user profile');
+    return {status: response.status};
   }
   var data_j = await response.json();
   return await data_j;
@@ -184,7 +187,7 @@ async function fetchUserReviews() {
   const response = await fetch('http://localhost:8000/filmaffinity/users/ratings/', data);
 
   if (!response.ok){
-    throw new Error('Error fetching user reviews');
+    return {status: response.status};
   }
   var data_j = await response.json();
   return await data_j;

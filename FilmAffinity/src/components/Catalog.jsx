@@ -163,7 +163,7 @@ function Catalog() {
   const [directorFilter, setDirectorFilter] = useState('');
   const [languageFilter, setLanguageFilter] = useState('');
 
-  const { isLoggedIn, checkSession } = useAuth();
+  const { isLoggedIn, isAdmin, checkSession } = useAuth();
   checkSession()
 
   useEffect(() => {

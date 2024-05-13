@@ -142,7 +142,7 @@ function MovieReviewsContainer({movie}){
   const [hasReviewed, setHasReviewed] = useState(false);
 
   // Get the togle triger from the context
-  const { isLoggedIn, checkSession } = useAuth();
+  const { isLoggedIn, isAdmin, checkSession } = useAuth();
 
   // Force to check if we are logged in or not
   checkSession();

@@ -1,5 +1,6 @@
 import { useLoaderData, useNavigation, Form, NavLink } from "react-router-dom";
 import './catalog.css';
+import { useAuth } from "../context/AuthContext";
 
 function Review({review}){
     return (
@@ -14,7 +15,7 @@ function Review({review}){
       </div>
     )
 }
-  
+
 function ReviewList({reviews}){
     return (
       <>
@@ -34,6 +35,13 @@ function UserReviews() {
     const busy = navigation.state === 'submitting' ||
                 navigation.state === 'loading';
     console.log(ratings);
+    const { isLoggedIn, isAdmin, checkSession } = useAuth();
+    checkSession();
+    if (!isLoggedIn) {
+      // redirect to login
+      console.log("User is not logged in");
+      navigation.navigate('/users/login');
+    }
     return (
         <>
         <div className="container">
