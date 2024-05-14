@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import MovieReviewsContainer from './MovieReviews';
 import { useAuth } from '../context/AuthContext';
+import { useLoaderData, useNavigation, Form } from "react-router-dom";
 
 function MovieInfo({movie}) {
     return <>
@@ -51,6 +52,8 @@ function MovieInfo({movie}) {
 function MovieDetails() {
   const { id } = useParams(); // Extrae el id de la URL
   const [ movie, setMovie ] = useState(null);
+  const { isLoggedIn, isAdmin, checkSession } = useAuth();
+  checkSession();
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -77,6 +80,9 @@ function MovieDetails() {
     <>
       <div className="container">
         <NavLink to="/movies/catalog/" className="boton-volver">Return to Catalog</NavLink>
+
+        { isAdmin && 
+        <NavLink to={`/movies/catalog/edit/${id}`} className="boton-edit">Edit</NavLink> }
         <MovieInfo movie={movie}/>
         <MovieReviewsContainer movie={movie}/>
       </div>

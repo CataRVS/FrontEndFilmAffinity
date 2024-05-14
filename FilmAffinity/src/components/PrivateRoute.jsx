@@ -14,4 +14,18 @@ const PrivateRoute = ({ children }) => {
     return children;
 };
 
-export default PrivateRoute;
+const PrivateAdminRoute = ({ children }) => {
+    const { isLoggedIn, isAdmin, checkSession } = useAuth();
+    checkSession();
+    console.log("IS ADMIN");
+    console.log(isAdmin);
+
+    if (!isAdmin) {
+        // Redirigir a la página de login
+        return <Navigate to="/users/profile" replace />;
+    }
+
+    return children;
+}
+
+export { PrivateRoute, PrivateAdminRoute };

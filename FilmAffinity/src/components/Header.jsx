@@ -27,7 +27,6 @@ export default function Header() {
                     <li>
                         <NavLink to="/moreInfo">About us</NavLink>
                     </li>
-                    {/* TODO: See if we put here profile or login. */}
                     {isLoggedIn && (
                         <li onClick={toggleDropdown}>
                             <span>Profile</span>
@@ -49,6 +48,13 @@ export default function Header() {
                     {!isLoggedIn && (
                         <li>
                             <NavLink to="/users/login">Login</NavLink>
+                        </li>
+                    )}
+
+                    {/*If we are admin we can also add movies and get a tab for that*/}
+                    {isAdmin && (
+                        <li>
+                            <NavLink to="/movies/add">Add Movie</NavLink>
                         </li>
                     )}
                 </ul>

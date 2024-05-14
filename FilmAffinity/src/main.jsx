@@ -1,17 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+// Other components
+import App from "./components/App.jsx";
+import { PrivateRoute, PrivateAdminRoute } from "./components/PrivateRoute.jsx";
 import { createBrowserRouter, RouterProvider, redirect } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext.jsx";
+// User components
 import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 import UserProfileEdit from "./components/UserProfileEdit.jsx";
 import UserProfileInformation from "./components/UserProfileInformation.jsx";
-import Catalog from "./components/Catalog.jsx";
-import MoreInfo from "./components/MoreInfo.jsx";
-import MovieDetails from "./components/MovieDetails.jsx";
-import App from "./components/App.jsx";
 import UserReviews from './components/UserReviews.jsx';
-import { AuthProvider } from "./context/AuthContext.jsx";
-import PrivateRoute from "./components/PrivateRoute.jsx";
+// Movie components
+import Catalog from "./components/Catalog.jsx";
+import UpdateMovie from './components/UpdateMovie.jsx';
+import MovieDetails from "./components/MovieDetails.jsx";
+import AddMovie from "./components/AddMovie.jsx";
+// MoreInfo component
+import MoreInfo from "./components/MoreInfo.jsx";
 
 
 // Configuración de rutas y componentes
@@ -56,6 +62,16 @@ const router = createBrowserRouter([{
       action: createReview
     },
     {
+      path: "/movies/catalog/edit/:id",
+      element: <PrivateAdminRoute><UpdateMovie/></PrivateAdminRoute>,
+      action: updateMovie
+    },
+    {
+      path: "/movies/add",
+      element: <PrivateAdminRoute><AddMovie/></PrivateAdminRoute>,
+      action: createMovie
+    },
+    {
       path: "/moreInfo",
       element: <MoreInfo/>
     }
@@ -82,15 +98,10 @@ async function signIn({ request }) {
     credentials: 'include'
   };
 
-  console.log(data);
-
   // django is at localhost:8000
   const loginRes = await fetch('http://localhost:8000/filmaffinity/users/login/', data);
-  console.log(loginRes);
-  console.log(await loginRes.headers);
   // Get cookie from response cookies   
   const cookie = loginRes.headers.get('Set-Cookie');
-  console.log(cookie);
   if (loginRes.ok) {
     return redirect('/movies/catalog');
   }
@@ -116,7 +127,7 @@ async function fetchUserProfile() {
   // Check if the user is logged in using authProvider
   const data = {
     method: 'GET',
-    //credentials: 'include',
+    credentials: 'include',
     headers: {'Content-Type': 'application/json'}
   };
 
@@ -133,7 +144,7 @@ async function fetchUserProfile() {
 async function logoutUser() {
   const data = {
     method: 'DELETE',
-    // credentials: 'include',
+    credentials: 'include',
     headers: {'Content-Type': 'application/json'}
   };
 
@@ -149,7 +160,7 @@ async function actionUserProfile({ request }) {
   if (request.method === 'DELETE') {
     const data = {
       method: 'DELETE',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {'Content-Type': 'application/json'}
     };
   
@@ -187,7 +198,7 @@ async function actionUserProfile({ request }) {
 async function fetchUserReviews() {
   const data = {
     method: 'GET',
-    // credentials: 'include',
+    credentials: 'include',
     headers: {'Content-Type': 'application/json'}
   };
 
@@ -240,4 +251,151 @@ async function createReview({ request }) {
   // Reload and redirect to the same page
   window.location.reload();
   return redirect(`/movies/catalog/${id}`);
+}
+
+
+async function updateMovie({ request }) {
+  const id = window.location.pathname.split('/').pop();
+
+  if (request.method === 'DELETE') {
+    const data = {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'}
+    };
+  
+    // Add a confirmation window
+    if (!window.confirm('Are you sure you want to delete this movie?')) {
+      const encodedId = encodeURIComponent(id);
+      return redirect(`/movies/catalog/edit/${encodedId}`);
+    }
+  
+    const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`, data);
+    if (!response.ok){
+      throw new Error('Error deleting movie');
+    }
+    // Redirect to login
+    return redirect('/movies/catalog');
+  }
+  else {
+
+    const formData = await request.formData();
+    const rawMovieData = Object.fromEntries(formData);
+
+    // Crear la lista de géneros
+    const genres = [];
+    Object.keys(rawMovieData).forEach(key => {
+      if (key.startsWith('genre[')) {
+        genres.push(rawMovieData[key]);
+      }
+    });
+
+    // Crear la lista de actores
+    const actors = [];
+    Object.keys(rawMovieData).forEach(key => {
+      if (key.startsWith('actors_name[')) {
+        const index = key.match(/\d+/)[0]; // Extrae el índice numérico del nombre
+        actors.push({
+          name: rawMovieData[`actors_name[${index}]`],
+          surname: rawMovieData[`actors_surname[${index}]`]
+        });
+      }
+    });
+
+    // Concatenar nombre y apellido del director
+    const director = {"name": rawMovieData.director_name,
+                      "surname": rawMovieData.director_surname};
+
+    // Construir el objeto movie con el nuevo formato
+    const movie = {
+      title: rawMovieData.title,
+      release_date: rawMovieData.release_date,
+      duration: rawMovieData.duration,
+      language: rawMovieData.language,
+      genres: genres,
+      actors: actors,
+      director: director,
+      synopsis: rawMovieData.synopsis
+    };
+    console.log(movie);
+
+    const data = {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(movie),
+      credentials: 'include'
+    };
+
+    const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`, data);
+    if (!response.ok){
+      throw new Error('Error updating movie');
+    }
+    return redirect(`/movies/catalog/${id}`);
+  }
+}
+
+
+async function createMovie({ request }) {
+  const formData = await request.formData();
+  const rawMovieData = Object.fromEntries(formData);
+  
+  // Transform the release_date to string format
+  // year-month-date not in 05/09/2024' format
+  const date = new Date(rawMovieData.release_date);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const release_date = `${year}-${month}-${day}`;
+  console.log(release_date);
+
+  // Crear la lista de géneros
+  const genres = [];
+  Object.keys(rawMovieData).forEach(key => {
+    if (key.startsWith('genre[')) {
+      genres.push(rawMovieData[key]);
+    }
+  });
+
+  // Crear la lista de actores
+  const actors = [];
+  Object.keys(rawMovieData).forEach(key => {
+    if (key.startsWith('actors_name[')) {
+      const index = key.match(/\d+/)[0]; // Extrae el índice numérico del nombre
+      actors.push({
+        name: rawMovieData[`actors_name[${index}]`],
+        surname: rawMovieData[`actors_surname[${index}]`]
+      });
+    }
+  });
+
+  // Concatenar nombre y apellido del director
+  const director = {"name": rawMovieData.director_name,
+                    "surname": rawMovieData.director_surname};
+
+  // Create form data with the information
+  const movie = {
+    title: rawMovieData.title,
+    release_date: release_date,
+    duration: rawMovieData.duration,
+    language: rawMovieData.language,
+    genres: genres,
+    actors: actors,
+    director: director,
+    synopsis: rawMovieData.synopsis
+  };
+
+  console.log(movie);
+
+  const data = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(movie),
+    credentials: 'include'
+  };
+
+  const response = await fetch('http://localhost:8000/filmaffinity/movies/', data);
+  if (!response.ok){
+    throw new Error('Error updating movie');
+  }
+  return redirect(`/movies/catalog/`);
 }

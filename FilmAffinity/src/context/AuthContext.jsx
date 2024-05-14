@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
             // Check if the user is admin
             const isAdminResponse = await fetch('http://localhost:8000/filmaffinity/users/check-admin/', {
                 method: 'GET',
-                // credentials: 'include'
+                credentials: 'include'
             });
 
             if (isAdminResponse.status === 200) {
@@ -47,12 +47,17 @@ export const AuthProvider = ({ children }) => {
             else {
                 throw new Error('Failed to check if user is admin');
             }
+            console.log('Is admin:', isAdmin);
 
         } catch (error) {
             console.error('Failed to check session', error);
             setIsLoggedIn(false);
         }
     };
+
+    useEffect(() => {
+        checkSession();
+    }, []);
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, isAdmin, checkSession }}>

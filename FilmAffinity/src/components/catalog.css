@@ -149,3 +149,12 @@ a {
     border-radius: 3px;
     float: right;
 }
+
+.boton-edit {
+    background-color: #00cc00;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    float: right;
+  }
