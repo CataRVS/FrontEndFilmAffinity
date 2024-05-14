@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
             // Check if the user is admin
             const isAdminResponse = await fetch('http://localhost:8000/filmaffinity/users/check-admin/', {
                 method: 'GET',
-                credentials: 'include'
+                // credentials: 'include'
             });
 
             if (isAdminResponse.status === 200) {

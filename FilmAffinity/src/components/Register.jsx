@@ -16,7 +16,19 @@ export default function Register() {
     const registerError = !busy && responseError;
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
+    const [passwordValid, setPasswordValid] = useState(true);
     const diffPasswords = password !== password2;
+
+    function validatePassword(password) {
+      const re = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).*$/;
+      return re.test(password);
+    }
+
+    const handlePasswordChange = (e) => {
+      const newPassword = e.target.value;
+      setPassword(newPassword);
+      setPasswordValid(validatePassword(newPassword));
+    }
 
     return (
         <Stack direction="row" justifyContent="center" alignItems="center"
@@ -26,11 +38,11 @@ export default function Register() {
               <Stack direction="column" justifyContent="center" alignItems="center">
                 <AccountBoxIcon color="action" sx={{ fontSize: 40, mb: 2 }}/>
                 <TextField margin="dense" size="small" required fullWidth disabled={busy}
-                  label="first_name"
+                  label="First name"
                   name="first_name"
                 />
                 <TextField margin="dense" size="small" required fullWidth disabled={busy}
-                  label="last_name"
+                  label="Last name"
                   name="last_name"
                 />
                 <TextField margin="dense" size="small" required fullWidth disabled={busy}
@@ -38,12 +50,14 @@ export default function Register() {
                   name="email"
                   type="email"
                 />
-                <TextField  margin="dense" size="small" required fullWidth disabled={busy}
+                <TextField margin="dense" size="small" required fullWidth disabled={busy}
                   label="Password"
                   name="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
+                  error={!passwordValid}
+                  helperText={!passwordValid && "Incorrect password format"}
                 />
                 <TextField  margin="dense" size="small" required fullWidth
                   label="Repeat password"
@@ -56,7 +70,7 @@ export default function Register() {
                 />
                 <Alert variant="outlined" severity="error" sx={{
                   mt:1, width:'100%', py:0, visibility: registerError ? 'visible' : 'hidden'}}>
-                  {registerError && registerError.status === 409 ? 'User is already registered' : 'Error while signing in' }
+                  {registerError && registerError.status === 409 ? 'User is already registered' : 'Invalid password format' }
                 </Alert>
                 <LoadingButton type="submit" variant="contained" fullWidth sx={{mt:2,mb:1}} 
                   loading={busy} disabled={busy || diffPasswords}>

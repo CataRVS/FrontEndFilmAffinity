@@ -82,8 +82,15 @@ async function signIn({ request }) {
     credentials: 'include'
   };
 
+  console.log(data);
+
   // django is at localhost:8000
   const loginRes = await fetch('http://localhost:8000/filmaffinity/users/login/', data);
+  console.log(loginRes);
+  console.log(await loginRes.headers);
+  // Get cookie from response cookies   
+  const cookie = loginRes.headers.get('Set-Cookie');
+  console.log(cookie);
   if (loginRes.ok) {
     return redirect('/movies/catalog');
   }
@@ -109,7 +116,7 @@ async function fetchUserProfile() {
   // Check if the user is logged in using authProvider
   const data = {
     method: 'GET',
-    credentials: 'include',
+    //credentials: 'include',
     headers: {'Content-Type': 'application/json'}
   };
 
@@ -126,7 +133,7 @@ async function fetchUserProfile() {
 async function logoutUser() {
   const data = {
     method: 'DELETE',
-    credentials: 'include',
+    // credentials: 'include',
     headers: {'Content-Type': 'application/json'}
   };
 
@@ -142,7 +149,7 @@ async function actionUserProfile({ request }) {
   if (request.method === 'DELETE') {
     const data = {
       method: 'DELETE',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {'Content-Type': 'application/json'}
     };
   
@@ -180,7 +187,7 @@ async function actionUserProfile({ request }) {
 async function fetchUserReviews() {
   const data = {
     method: 'GET',
-    credentials: 'include',
+    // credentials: 'include',
     headers: {'Content-Type': 'application/json'}
   };
 
