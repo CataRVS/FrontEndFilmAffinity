@@ -174,7 +174,7 @@ async function actionUserProfile({ request }) {
       throw new Error('Error deleting user profile');
     }
     // Redirect to login
-    return redirect('/users/login/?deleted');
+    return redirect('/users/login/');
   }
   else {
     const formData = await request.formData();
@@ -312,9 +312,9 @@ async function updateMovie({ request }) {
       release_date: rawMovieData.release_date,
       duration: rawMovieData.duration,
       language: rawMovieData.language,
-      genres: genres,
-      actors: actors,
-      director: director,
+      genres_data: genres,
+      actors_data: actors,
+      director_data: director,
       synopsis: rawMovieData.synopsis
     };
     console.log(movie);
@@ -346,7 +346,6 @@ async function createMovie({ request }) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const release_date = `${year}-${month}-${day}`;
-  console.log(release_date);
 
   // Crear la lista de géneros
   const genres = [];
@@ -378,9 +377,9 @@ async function createMovie({ request }) {
     release_date: release_date,
     duration: rawMovieData.duration,
     language: rawMovieData.language,
-    genres: genres,
-    actors: actors,
-    director: director,
+    genres_data: genres,
+    actors_data: actors,
+    director_data: director,
     synopsis: rawMovieData.synopsis
   };
 
