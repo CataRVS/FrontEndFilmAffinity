@@ -127,7 +127,7 @@ function GenreList() {
 
     // Function to remove the last genre from the list
     const removeLastGenre = () => {
-        if (genreList.length > 0) {
+        if (genreList.length > 1) {
             setGenreList(genreList.slice(0, -1));
         }
     };
@@ -137,6 +137,7 @@ function GenreList() {
             {genreList.map((genre, index) => (
                 <GenreField index={index} genre={genre} key={index}/>
             ))}
+            <br />
             <Button onClick={addGenre}>Add New Genre</Button>
             <Button onClick={removeLastGenre}>Remove Last Genre</Button>
         </div>
@@ -183,7 +184,9 @@ function ActorsList() {
     };
 
     const removeLastActor = () => {
-        setActorList(actorList.slice(0, -1));
+        if (actorList.length > 1) {
+            setActorList(actorList.slice(0, -1));
+        }
     };
 
     return (

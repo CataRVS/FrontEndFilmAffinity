@@ -79,7 +79,7 @@ function MovieDetails() {
   return (
     <>
       <div className="container">
-        <NavLink to="/movies/catalog/" className="boton-volver">Return to Catalog</NavLink>
+        <NavLink to="/movies/catalog" className="boton-volver">Return to Catalog</NavLink>
 
         { isAdmin && 
         <NavLink to={`/movies/catalog/edit/${id}`} className="boton-edit">Edit</NavLink> }
