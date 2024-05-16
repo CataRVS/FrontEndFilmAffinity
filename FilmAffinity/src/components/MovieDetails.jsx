@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useLoaderData, useNavigation, Form } from "react-router-dom";
 import RatingStars from './RatingStars';
 import './movie_details.css';
+import { BACKEND_URL } from "../Config.js"
 
 // function MovieInfo({ movie }) {
 //   return (
@@ -94,7 +95,7 @@ function MovieDetails() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`);
+        const response = await fetch(BACKEND_URL + `/filmaffinity/movies/${id}/`);
         if (!response.ok) {
           throw new Error('It was not possible to obtain the movie details');
         }

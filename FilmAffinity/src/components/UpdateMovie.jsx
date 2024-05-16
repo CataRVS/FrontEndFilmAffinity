@@ -11,6 +11,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { BACKEND_URL } from "../Config.js"
 
 
 function UpdateMovie() {
@@ -22,7 +23,7 @@ function UpdateMovie() {
     useEffect(() => {
       const fetchMovie = async () => {
         try {
-          const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`);
+          const response = await fetch(BACKEND_URL + `/filmaffinity/movies/${id}/`);
           if (!response.ok) {
             throw new Error('It was not possible to obtain the movie details');
           }

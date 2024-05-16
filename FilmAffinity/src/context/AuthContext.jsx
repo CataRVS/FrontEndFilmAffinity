@@ -1,5 +1,6 @@
 // src/contexts/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { BACKEND_URL } from "../Config.js"
 
 const AuthContext = createContext(null);
 
@@ -12,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     const checkSession = async () => {
         try {
             // fetch to django to check if the session is still active
-            const response = await fetch('http://localhost:8000/filmaffinity/users/check-session/', {
+            const response = await fetch(BACKEND_URL + '/filmaffinity/users/check-session/', {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -33,7 +34,7 @@ export const AuthProvider = ({ children }) => {
             }
 
             // Check if the user is admin
-            const isAdminResponse = await fetch('http://localhost:8000/filmaffinity/users/check-admin/', {
+            const isAdminResponse = await fetch(BACKEND_URL + '/filmaffinity/users/check-admin/', {
                 method: 'GET',
                 credentials: 'include'
             });

@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Form, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { BACKEND_URL } from "../Config.js"
 
 
 function Review({review}) {
@@ -128,7 +129,7 @@ async function fetchUserReview(movieId, isLoggedIn) {
   if (!isLoggedIn) {
     return {rating: 1, comment: "", hasReviewed: false};
   }
-  const response = await fetch(`http://localhost:8000/filmaffinity/movies/${movieId}/rating/user-rating/`, data);
+  const response = await fetch(BACKEND_URL + `/filmaffinity/movies/${movieId}/rating/user-rating/`, data);
   if (response.status === 404) {
     return {rating: 1, comment: "", hasReviewed: false};
   }
@@ -162,7 +163,7 @@ function MovieReviewsContainer({movie}){
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/filmaffinity/movies/${movie.id}/rating/`);
+        const response = await fetch(BACKEND_URL + `/filmaffinity/movies/${movie.id}/rating/`);
         if (!response.ok) {
           throw new Error('It was not possible to obtain the reviews');
         }
