@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 import RatingStars from './RatingStars';
+import { BACKEND_URL } from "../Config.js"
 
 
 const PAGE_SIZE = 9;
@@ -190,7 +191,7 @@ function Catalog() {
       filters.setFilter('director', directorFilter);
       filters.setFilter('language', languageFilter);
       try {
-        const response = await fetch(`http://localhost:8000/filmaffinity/movies/?${filters.getParams().toString()}`);
+        const response = await fetch(BACKEND_URL + `/filmaffinity/movies/?${filters.getParams().toString()}`);
         if (!response.ok) {
           throw new Error("We couldn't retrieve the movies");
         }

@@ -18,7 +18,7 @@ import MovieDetails from "./components/MovieDetails.jsx";
 import AddMovie from "./components/AddMovie.jsx";
 // MoreInfo component
 import MoreInfo from "./components/MoreInfo.jsx";
-
+import { BACKEND_URL } from "./Config.js"
 
 // Configuración de rutas y componentes
 const router = createBrowserRouter([{
@@ -99,7 +99,7 @@ async function signIn({ request }) {
   };
 
   // django is at localhost:8000
-  const loginRes = await fetch('http://localhost:8000/filmaffinity/users/login/', data);
+  const loginRes = await fetch(BACKEND_URL + '/filmaffinity/users/login/', data);
   // Get cookie from response cookies   
   const cookie = loginRes.headers.get('Set-Cookie');
   if (loginRes.ok) {
@@ -116,7 +116,7 @@ async function registerUser({ request }) {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(user)
   };
-  const registerRes = await fetch('http://localhost:8000/filmaffinity/users/', data);
+  const registerRes = await fetch(BACKEND_URL + '/filmaffinity/users/', data);
   if (registerRes.ok){
     return redirect('/users/login');
   }
@@ -131,7 +131,7 @@ async function fetchUserProfile() {
     headers: {'Content-Type': 'application/json'}
   };
 
-  const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
+  const response = await fetch(BACKEND_URL + '/filmaffinity/users/info/', data);
 
   if (!response.ok){
     return {status: response.status};
@@ -147,7 +147,7 @@ async function logoutUser() {
     headers: {'Content-Type': 'application/json'}
   };
 
-  const response = await fetch('http://localhost:8000/filmaffinity/users/logout/', data);
+  const response = await fetch(BACKEND_URL + '/filmaffinity/users/logout/', data);
 
   if (!response.ok){
     return redirect('/users/profile');
@@ -168,7 +168,7 @@ async function actionUserProfile({ request }) {
       return redirect('/users/profile');
     }
   
-    const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
+    const response = await fetch(BACKEND_URL + '/filmaffinity/users/info/', data);
     if (!response.ok){
       return redirect('/users/profile');
     }
@@ -185,7 +185,7 @@ async function actionUserProfile({ request }) {
       credentials: 'include'
     };
 
-    const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
+    const response = await fetch(BACKEND_URL + '/filmaffinity/users/info/', data);
     if (!response.ok){
       return redirect('/users/profile');
     }
@@ -201,7 +201,7 @@ async function fetchUserReviews() {
     headers: {'Content-Type': 'application/json'}
   };
 
-  const response = await fetch('http://localhost:8000/filmaffinity/users/ratings/', data);
+  const response = await fetch(BACKEND_URL + '/filmaffinity/users/ratings/', data);
 
   if (!response.ok){
     return {status: response.status};
@@ -224,7 +224,7 @@ async function createReview({ request }) {
       body: JSON.stringify(review),
       credentials: 'include'
     };
-    var response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/rating/`, data);
+    var response = await fetch(BACKEND_URL + `/filmaffinity/movies/${id}/rating/`, data);
   }
   else if (request.method === 'PUT') {
     const data = {
@@ -233,7 +233,7 @@ async function createReview({ request }) {
       body: JSON.stringify(review),
       credentials: 'include'
     };
-    var response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/rating/user-rating/`, data);
+    var response = await fetch(BACKEND_URL + `/filmaffinity/movies/${id}/rating/user-rating/`, data);
   }
   else {
     const data = {
@@ -241,7 +241,7 @@ async function createReview({ request }) {
       headers: {'Content-Type': 'application/json'},
       credentials: 'include'
     };
-    var response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/rating/user-rating/`, data);
+    var response = await fetch(BACKEND_URL + `/filmaffinity/movies/${id}/rating/user-rating/`, data);
   }
   if (!response.ok){
     // Show a window alert
@@ -269,7 +269,7 @@ async function updateMovie({ request }) {
       return redirect(`/movies/catalog/edit/${encodedId}`);
     }
   
-    const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`, data);
+    const response = await fetch(BACKEND_URL + `/filmaffinity/movies/${id}/`, data);
     if (!response.ok){
       return redirect('/movies/catalog');
     }
@@ -324,7 +324,7 @@ async function updateMovie({ request }) {
       credentials: 'include'
     };
 
-    const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`, data);
+    const response = await fetch(BACKEND_URL + `/filmaffinity/movies/${id}/`, data);
     if (!response.ok){
       return redirect(`/movies/catalog/${id}`);
     }
@@ -389,7 +389,7 @@ async function createMovie({ request }) {
     credentials: 'include'
   };
 
-  const response = await fetch('http://localhost:8000/filmaffinity/movies/', data);
+  const response = await fetch(BACKEND_URL + '/filmaffinity/movies/', data);
   if (!response.ok){
     return redirect('/movies/catalog');
   }
