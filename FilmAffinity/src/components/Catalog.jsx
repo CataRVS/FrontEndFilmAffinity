@@ -27,24 +27,29 @@ function ListCatalog({movieList,
                       setDirectorFilter,
                       languageFilter,
                       setLanguageFilter,}){
+  const [showFilters, setShowFilters] = useState(false);
   return <>
     <div className="container-catalog">
       <h2>Movie Catalog</h2>
       <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
-      <FilterList titleFilter={titleFilter}
-                  setTitleFilter={setTitleFilter}
-                  ratingFilter={ratingFilter}
-                  setRatingFilter={setRatingFilter}
-                  genreFilter={genreFilter}
-                  setGenreFilter={setGenreFilter}
-                  synopsisFilter={synopsisFilter}
-                  setSynopsisFilter={setSynopsisFilter}
-                  actorFilter={actorFilter}
-                  setActorFilter={setActorFilter}
-                  directorFilter={directorFilter}
-                  setDirectorFilter={setDirectorFilter}
-                  languageFilter={languageFilter}
-                  setLanguageFilter={setLanguageFilter}/>
+      {showFilters && <FilterList titleFilter={titleFilter}
+                                  setTitleFilter={setTitleFilter}
+                                  ratingFilter={ratingFilter}
+                                  setRatingFilter={setRatingFilter}
+                                  genreFilter={genreFilter}
+                                  setGenreFilter={setGenreFilter}
+                                  synopsisFilter={synopsisFilter}
+                                  setSynopsisFilter={setSynopsisFilter}
+                                  actorFilter={actorFilter}
+                                  setActorFilter={setActorFilter}
+                                  directorFilter={directorFilter}
+                                  setDirectorFilter={setDirectorFilter}
+                                  languageFilter={languageFilter}
+                                  setLanguageFilter={setLanguageFilter}/>
+      }
+      <button onClick={() => setShowFilters(!showFilters)}>
+        {showFilters ? 'Hide Filters' : 'Show Filters'}
+      </button>
       <br/>
       <MovieList movieList={movieList}/>
     </div>
@@ -67,13 +72,15 @@ function FilterList({titleFilter,
                       languageFilter,
                       setLanguageFilter,}) {
   return <>
-      <MovieFilter filterName="Title" movieFilter={titleFilter} setMovieFilter={setTitleFilter}/>
-      <MovieFilter filterName="Rating" movieFilter={ratingFilter} setMovieFilter={setRatingFilter}/>
-      <MovieFilter filterName="Genre" movieFilter={genreFilter} setMovieFilter={setGenreFilter}/>
-      <MovieFilter filterName="Synopsis" movieFilter={synopsisFilter} setMovieFilter={setSynopsisFilter}/>
-      <MovieFilter filterName="Actor" movieFilter={actorFilter} setMovieFilter={setActorFilter}/>
-      <MovieFilter filterName="Director" movieFilter={directorFilter} setMovieFilter={setDirectorFilter}/>
-      <MovieFilter filterName="Language" movieFilter={languageFilter} setMovieFilter={setLanguageFilter}/>
+      <div className="filter-container">
+        <MovieFilter filterName="Title" movieFilter={titleFilter} setMovieFilter={setTitleFilter}/>
+        <MovieFilter filterName="Rating" movieFilter={ratingFilter} setMovieFilter={setRatingFilter}/>
+        <MovieFilter filterName="Genre" movieFilter={genreFilter} setMovieFilter={setGenreFilter}/>
+        <MovieFilter filterName="Synopsis" movieFilter={synopsisFilter} setMovieFilter={setSynopsisFilter}/>
+        <MovieFilter filterName="Actor" movieFilter={actorFilter} setMovieFilter={setActorFilter}/>
+        <MovieFilter filterName="Director" movieFilter={directorFilter} setMovieFilter={setDirectorFilter}/>
+        <MovieFilter filterName="Language" movieFilter={languageFilter} setMovieFilter={setLanguageFilter}/>
+      </div>
     </>
 }
 
@@ -107,7 +114,7 @@ function MovieFilter({filterName, movieFilter, setMovieFilter}){
   }
   return <>
     <br/>
-    <label htmlFor={filterName}>Filter by {filterName}: </label>
+    <label htmlFor={filterName}>{filterName}: </label>
     {/* If the filter is a number, the input will be a number */}
     {/* If the filter is not a number, the input will be a text */}
     <input type={filterName === "Rating" ? "number" : "text"} 

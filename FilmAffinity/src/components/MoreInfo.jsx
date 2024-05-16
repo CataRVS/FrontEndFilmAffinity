@@ -28,7 +28,7 @@ function Information() {
 function Info() {
   return (
     <>
-        <div className="container">
+        <div className="container-details">
             <Information/>
         </div>
     </>

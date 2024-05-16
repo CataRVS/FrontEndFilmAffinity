@@ -39,7 +39,7 @@ function UserReviews() {
     return (
         <>
         <div className="container-details">
-            <h1>My Reviews</h1>
+            <h2>My Reviews</h2>
             <ReviewList reviews={ratings}/>
         </div>
         </>

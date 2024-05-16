@@ -19,6 +19,26 @@ h2 {
 }
 
 
+.filter-container {
+    background-color: #f0f0f0;
+    padding: 5px 15px;
+    margin: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.filter-container input[type="text"],
+.filter-container input[type="number"] {
+    /*Width until the end of the box*/
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
 #movieList {
     display: flex;
     flex-wrap: wrap;
@@ -30,6 +50,8 @@ h2 {
     width: calc(33.33333% - 5px); /* 3 per row minus margin */
     margin: 10px, 5px;
     box-sizing: border-box; /* padding and border included in the computation */
+    display: block;
+    padding: 20px 20px;
 }
 
 

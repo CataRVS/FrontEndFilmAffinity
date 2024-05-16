@@ -28,8 +28,8 @@ export default function AddMovie() {
     };
 
     return (<>
-        <h1>Create Movie</h1>
-        <Card>
+        <div className="container-catalog">
+            <h2>Create Movie</h2>
             <Form method="post" encType="multipart/form-data">
                 <CardContent>
                     <Stack spacing={2}>
@@ -92,7 +92,7 @@ export default function AddMovie() {
                     </Button>
                 </CardActions>
             </Form>
-        </Card>
+        </div>
     </>);
 }
 
