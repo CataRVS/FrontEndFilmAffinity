@@ -4,17 +4,51 @@ import { NavLink } from 'react-router-dom';
 import MovieReviewsContainer from './MovieReviews';
 import { useAuth } from '../context/AuthContext';
 import { useLoaderData, useNavigation, Form } from "react-router-dom";
+import RatingStars from './RatingStars';
+import './movie_details.css';
+
+// function MovieInfo({ movie }) {
+//   return (
+//     <div className="movie-info" id={`movie-${movie.id}`}>
+//       <img src={movie.poster} alt="Poster" className="thumbnail" />
+//       <div className="info">
+        // <h3 className="title">{movie.title}</h3>
+        // <div className="rating">
+        //   <RatingStars rating={parseFloat(movie.average_rating.toFixed(2))} />
+        //   <span>{parseFloat(movie.average_rating.toFixed(2))} / 10</span>
+        // </div>
+//         <p className="year">Year Released: {movie.release_date}</p>
+//         <p className="duration">Duration: {movie.duration} minutes</p>
+//         <p className="language">Language: {movie.language}</p>
+//         <div className="genres">
+//           {movie.genres.map((genre, index) => (
+//             <span key={index} className="genre-badge">{genre}</span>
+//           ))}
+//         </div>
+//         <p className="director">Director: {movie.director}</p>
+//         <p className="actors">Actors: {movie.actors.join(', ')}</p>
+//         <p className="synopsis">Synopsis: {movie.synopsis}</p>
+//       </div>
+//     </div>
+//   );
+// }
+
 
 function MovieInfo({movie}) {
     return <>
       <div className="movie-details" id="movieDetails">
-        <img src={movie.poster} alt="Poster" id="poster" />
+        <img src={movie.poster} alt="Poster" id="poster-details" />
         <div className="info">
-          <h2 id="title">{movie.title}</h2>
-          <p id="rating">
+          <h2 id="title" className="movie-title">{movie.title}</h2>
+          {/* <p id="rating">
           <strong>Rating: </strong>
             {movie.average_rating ? parseFloat(movie.average_rating.toFixed(2)) + " / 10": "Not rated"}
-          </p>
+          </p> */}
+        <p className="rating">
+          {movie.average_rating ? <RatingStars rating={parseFloat(movie.average_rating.toFixed(2))} /> : 
+                                  <RatingStars rating={0} />}
+          {movie.average_rating ? parseFloat(movie.average_rating.toFixed(2)) + " / 10": "Not rated"}
+        </p>
           <p>
             <strong>Year Released: </strong>{movie.release_date}
             <span id="release_date" />
@@ -27,10 +61,12 @@ function MovieInfo({movie}) {
             <strong>Language: </strong>{movie.language}
             <span id="language" />
           </p>
-          <p>
-            <strong>Genre: </strong>{movie.genres.map(genre => genre).join(', ')}
-            <span id="genres" />
-          </p>
+         <div className="genres">
+          <p><strong>Genres: </strong></p>
+           {movie.genres.map((genre, index) => (
+             <span key={index} className="genre-badge">{genre}</span>
+           ))}
+         </div>
           <p>
             <strong>Director: </strong>{movie.director}
             <span id="director" />
@@ -79,11 +115,12 @@ function MovieDetails() {
   return (
     <>
       <div className="container">
-        <NavLink to="/movies/catalog/" className="boton-volver">Return to Catalog</NavLink>
-
-        { isAdmin && 
-        <NavLink to={`/movies/catalog/edit/${id}`} className="boton-edit">Edit</NavLink> }
         <MovieInfo movie={movie}/>
+        <div className="button-container">
+          <NavLink to="/movies/catalog" className="boton-volver">Return to Catalog</NavLink>
+          { isAdmin && 
+          <NavLink to={`/movies/catalog/edit/${id}`} className="boton-edit">Edit</NavLink> }
+        </div>
         <MovieReviewsContainer movie={movie}/>
       </div>
     </>

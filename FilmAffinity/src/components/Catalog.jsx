@@ -4,8 +4,10 @@ import './catalog.css';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+import RatingStars from './RatingStars';
 
-const PAGE_SIZE = 10;
+
+const PAGE_SIZE = 9;
 const INITIAL_PAGE = 1;
 var total_products = 16;
 
@@ -27,26 +29,31 @@ function ListCatalog({movieList,
                       setDirectorFilter,
                       languageFilter,
                       setLanguageFilter,}){
+  const [showFilters, setShowFilters] = useState(false);
   return <>
     <div className="container">
-      <h2>Movie Catalog</h2>
-      <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
-      <FilterList titleFilter={titleFilter}
-                  setTitleFilter={setTitleFilter}
-                  ratingFilter={ratingFilter}
-                  setRatingFilter={setRatingFilter}
-                  genreFilter={genreFilter}
-                  setGenreFilter={setGenreFilter}
-                  synopsisFilter={synopsisFilter}
-                  setSynopsisFilter={setSynopsisFilter}
-                  actorFilter={actorFilter}
-                  setActorFilter={setActorFilter}
-                  directorFilter={directorFilter}
-                  setDirectorFilter={setDirectorFilter}
-                  languageFilter={languageFilter}
-                  setLanguageFilter={setLanguageFilter}/>
+      <h1>Movie Catalog</h1>
+      {showFilters && <FilterList titleFilter={titleFilter}
+                                  setTitleFilter={setTitleFilter}
+                                  ratingFilter={ratingFilter}
+                                  setRatingFilter={setRatingFilter}
+                                  genreFilter={genreFilter}
+                                  setGenreFilter={setGenreFilter}
+                                  synopsisFilter={synopsisFilter}
+                                  setSynopsisFilter={setSynopsisFilter}
+                                  actorFilter={actorFilter}
+                                  setActorFilter={setActorFilter}
+                                  directorFilter={directorFilter}
+                                  setDirectorFilter={setDirectorFilter}
+                                  languageFilter={languageFilter}
+                                  setLanguageFilter={setLanguageFilter}/>
+      }
+      <button className="button" onClick={() => setShowFilters(!showFilters)}>
+        {showFilters ? 'Hide Filters' : 'Show Filters'}
+      </button>
       <br/>
       <MovieList movieList={movieList}/>
+      <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
     </div>
   </>
 }
@@ -67,13 +74,15 @@ function FilterList({titleFilter,
                       languageFilter,
                       setLanguageFilter,}) {
   return <>
-      <MovieFilter filterName="Title" movieFilter={titleFilter} setMovieFilter={setTitleFilter}/>
-      <MovieFilter filterName="Rating" movieFilter={ratingFilter} setMovieFilter={setRatingFilter}/>
-      <MovieFilter filterName="Genre" movieFilter={genreFilter} setMovieFilter={setGenreFilter}/>
-      <MovieFilter filterName="Synopsis" movieFilter={synopsisFilter} setMovieFilter={setSynopsisFilter}/>
-      <MovieFilter filterName="Actor" movieFilter={actorFilter} setMovieFilter={setActorFilter}/>
-      <MovieFilter filterName="Director" movieFilter={directorFilter} setMovieFilter={setDirectorFilter}/>
-      <MovieFilter filterName="Language" movieFilter={languageFilter} setMovieFilter={setLanguageFilter}/>
+      <div className="filter-container">
+        <MovieFilter filterName="Title" movieFilter={titleFilter} setMovieFilter={setTitleFilter}/>
+        <MovieFilter filterName="Rating" movieFilter={ratingFilter} setMovieFilter={setRatingFilter}/>
+        <MovieFilter filterName="Genre" movieFilter={genreFilter} setMovieFilter={setGenreFilter}/>
+        <MovieFilter filterName="Synopsis" movieFilter={synopsisFilter} setMovieFilter={setSynopsisFilter}/>
+        <MovieFilter filterName="Actor" movieFilter={actorFilter} setMovieFilter={setActorFilter}/>
+        <MovieFilter filterName="Director" movieFilter={directorFilter} setMovieFilter={setDirectorFilter}/>
+        <MovieFilter filterName="Language" movieFilter={languageFilter} setMovieFilter={setLanguageFilter}/>
+      </div>
     </>
 }
 
@@ -85,7 +94,7 @@ function PageFilter({currentPage, setCurrentPage}) {
     setCurrentPage(page);
   }
   return <>
-    <div className="buttons">
+    <div className="paginator">
       <button onClick={() => changePage(currentPage - 1)} disabled={currentPage==INITIAL_PAGE}>&lt;</button>
       <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/>
       <button onClick={() => changePage(currentPage + 1)} disabled={currentPage==Math.ceil(total_products / PAGE_SIZE)}>&gt;</button>
@@ -107,7 +116,7 @@ function MovieFilter({filterName, movieFilter, setMovieFilter}){
   }
   return <>
     <br/>
-    <label htmlFor={filterName}>Filter by {filterName}: </label>
+    <label htmlFor={filterName}>{filterName}: </label>
     {/* If the filter is a number, the input will be a number */}
     {/* If the filter is not a number, the input will be a text */}
     <input type={filterName === "Rating" ? "number" : "text"} 
@@ -120,12 +129,14 @@ function MovieFilter({filterName, movieFilter, setMovieFilter}){
 
 function Movie({movie}) {
   return <>
-    <div className="movie-details" id="movieDetails">
-      <img src={movie.poster} alt="Thumbnail" id="thumbnail" />
+    <div className="movie-info" id="movieDetails">
+      <img src={movie.poster} alt="Poster" id="thumbnail" />
       <div className="info">
-        <h2 id="title">{movie.title}</h2>
+        <h3 id="title">{movie.title}</h3>
+        {movie.average_rating ? <RatingStars rating={parseFloat(movie.average_rating.toFixed(2))} /> : 
+                                <RatingStars rating={0} />}
         <p>
-          <strong>Rating: </strong>
+          {/* <strong>Rating: </strong> */}
           {/* If the movie has no rating, it will be "Not rated" */}
           {/* If the movie has a rating, it will be shown with two decimals */}
           {/* toFixed(2) returns a string, and numbers such as 7 are turned into 7.00 */}
@@ -143,7 +154,7 @@ function MovieList({movieList = []}) {
   return <>
     <div id="movieList">
       {movieList.map((movie) => (
-        <NavLink to={`/movies/catalog/${movie.id}`} key={movie.id}>
+        <NavLink to={`/movies/catalog/${movie.id}`} key={movie.id} className="go-to-movie">
           <Movie key={movie.id} movie={movie} />
         </NavLink>
       ))}

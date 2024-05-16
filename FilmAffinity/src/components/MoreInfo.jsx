@@ -1,98 +1,36 @@
-import { useState } from 'react'
-import './App.css'
-
-import Footer from './Footer.jsx'
-import Header from './Header.jsx'
-
-function MoreInfo(){
-    return (
-        <>
-        <div className="container">
-            <Information/>
-            <ContactForm/>
-        </div>
-        </>
-    )
-}
-
 function Information() {
     return (
         <>
-        <h2>¿Quiénes somos?</h2>
-            <div className="info">
-            <p>
-                Somos una tienda fundada en 2024 dedicada a la venta minorista de
-                productos tecnológicos a buen precio.
-            </p>
-            <p>
-                Nuestro teléfono de atención al cliente es 91606066 de 8h a 19h de lunes
-                a viernes.
-            </p>
-            <p>
-                Pero también puedes contactarnos a cualquier hora con el siguiente
-                formulario.
-            </p>
+            <h2>¿Quiénes somos?</h2>
+            {/* Justificar el texto del contenedor */}
+            <div className="info" style={{ textAlign: 'justify' }}>
+                <p>
+                    Somos un grupo de estudiantes de Ingeniería Matemática e Inteligencia Artificial
+                    en la Universidad Pontificia de Comillas, ICAI.
+                </p>
+                <br/>
+                <p>
+                    Esta página web ha sido creada como proyecto final de la asignatura de
+                    Desarrollo de Aplicaciones y Servicios. Es un catálogo de películas que
+                    permite a los usuarios registrados crear reseñas de películas y puntuarlas.
+                    También se pueden buscar películas por título, género, director, actores y
+                    puntuación.
+                </p>
+                <br/>
+                <p>
+                    Esperamos que les resulte útil y accesible.
+                </p>
             </div>
         </>
     )
 }
 
-function ContactFormLong() {
-    return (
-        <>
-            <form action="" method="post">
-                <div className="form-control">
-                <label htmlFor="name">Name</label>
-                <input type="text" id="name" placeholder="Nombre" required="" />
-                </div>
-                <div className="form-control">
-                <label htmlFor="email">Email</label>
-                <input type="email" id="email" placeholder="Email" required="" />
-                </div>
-                <div className="form-control">
-                <label htmlFor="subject">Rating</label>
-                <input type="text" id="subject" placeholder="Asunto" />
-                </div>
-                <div className="form-control">
-                <label htmlFor="message">Review</label>
-                <textarea name="message" placeholder="Review" defaultValue={""} />
-                </div>
-                <button type="submit">Enviar</button>
-            </form>
-        </>
-    )
-}
-
-function ContactForm() {
-    return (
-        <>
-            <form action="" method="post">
-                <QuestionForm id="name" type="text" placeholder="Nombre" text="Nombre"/>
-                <QuestionForm id="email" type="email" placeholder="Email" text="Email"/>
-                <QuestionForm id="subject" type="text" placeholder="Asunto" text="Asunto"/>
-                <QuestionForm id="message" type="text" placeholder="Mensaje" text="Mensaje"/>
-                <button type="submit">Enviar</button>
-            </form>
-        </>
-    )
-}
-
-function QuestionForm({id, type, placeholder="", required="", defaultValue="", text=""}) {
-    return (
-        <>
-        <div className="form-control">
-            <label htmlFor={id}>{text}</label>
-            <input type={type} id={id} placeholder={placeholder} required={required} defaultValue={defaultValue}/>
-        </div>
-        </>
-    )
-}
-
-
 function Info() {
   return (
     <>
-      <MoreInfo/>
+        <div className="container">
+            <Information/>
+        </div>
     </>
   )
 }

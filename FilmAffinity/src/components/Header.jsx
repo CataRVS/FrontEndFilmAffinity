@@ -18,43 +18,45 @@ export default function Header() {
 
     return (
         <header>
-            <h1>FilmAffinity</h1>
+            <h1>
+                <span class="film-text">Film</span><span class="affinity-text">Affinity</span>
+            </h1>
+
             <nav>
                 <ul>
-                    <li>
-                        <NavLink to="/movies/catalog">Movies</NavLink>
+                    <li className="header-element">
+                        <NavLink className="header-link" to="/movies/catalog">Movies</NavLink>
                     </li>
-                    <li>
-                        <NavLink to="/moreInfo">About us</NavLink>
+                    <li className="header-element">
+                        <NavLink className="header-link" to="/moreInfo">About us</NavLink>
                     </li>
+                    {/*If we are admin we can also add movies and get a tab for that*/}
+                    {isAdmin && (
+                        <li className="header-element">
+                            <NavLink className="header-link" to="/movies/add">Add Movie</NavLink>
+                        </li>
+                    )}
                     {isLoggedIn && (
-                        <li onClick={toggleDropdown}>
-                            <span>Profile</span>
+                        <li onClick={toggleDropdown} className="header-element">
+                            <span className="header-link">Profile</span>
                             {showDropdown && (
                                 <ul className="dropdown-menu">
-                                    <li>
-                                        <NavLink to="/users/profile">My Profile</NavLink>
+                                    <li className="header-element">
+                                        <NavLink className="header-link" to="/users/profile">My Profile</NavLink>
                                     </li>
-                                    <li>
-                                        <NavLink to="/users/edit-profile">Edit Profile</NavLink>
+                                    <li className="header-element">
+                                        <NavLink className="header-link" to="/users/edit-profile">Edit Profile</NavLink>
                                     </li>
-                                    <li>
-                                        <NavLink to="/users/reviews">My Reviews</NavLink>
+                                    <li className="header-element">
+                                        <NavLink className="header-link" to="/users/reviews">My Reviews</NavLink>
                                     </li>
                                 </ul>
                             )}
                         </li>
                     )}
                     {!isLoggedIn && (
-                        <li>
-                            <NavLink to="/users/login">Login</NavLink>
-                        </li>
-                    )}
-
-                    {/*If we are admin we can also add movies and get a tab for that*/}
-                    {isAdmin && (
-                        <li>
-                            <NavLink to="/movies/add">Add Movie</NavLink>
+                        <li className="header-element">
+                            <NavLink className="header-link" to="/users/login">Login</NavLink>
                         </li>
                     )}
                 </ul>

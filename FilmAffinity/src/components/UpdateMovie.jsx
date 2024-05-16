@@ -43,58 +43,67 @@ function UpdateMovie() {
 
     // movie.poster
     return <>
-        <h1>Update Movie</h1>
-        <Card>
-            <Form method="put">
-            <CardContent>
-            <Stack spacing={2}>
-                <TextField
-                name="title"
-                label="Title"
-                defaultValue={movie.title}
-                variant="outlined"
-                />
-                <TextField
-                name="release_date"
-                label="Release Date"
-                defaultValue={movie.release_date}
-                variant="outlined"
-                />
-                <TextField
-                name="duration"
-                label="Duration"
-                defaultValue={movie.duration}
-                variant="outlined"
-                />
-                <TextField
-                name="language"
-                label="Language"
-                defaultValue={movie.language}
-                variant="outlined"
-                />
-                <ListGenresEdit genres={movie.genres} />
-                <ListActorsEdit actors={movie.actors} />
-                <DirectorEdit director={movie.director} />
-                <TextField
-                name="synopsis"
-                label="Synopsis"
-                defaultValue={movie.synopsis}
-                variant="outlined"
-                />
-            </Stack>
-            </CardContent>
-            <Divider />
-            <CardActions sx={{justifyContent: "center"}}>
-                <Button type="submit" variant="contained" color="primary" size="small">
-                Update
-                </Button>
-            </CardActions>
-            </Form>
-            <Form method="delete">
-                <Button variant="contained" type="submit" color="error">Delete Movie</Button>
-            </Form>
-            <br/>
-        </Card>
+        <div className="container">
+            <h1>Update Movie</h1>
+            <Card>
+                <Form method="put">
+                <CardContent>
+                <Stack spacing={2}>
+                    <TextField
+                    name="title"
+                    label="Title"
+                    defaultValue={movie.title}
+                    variant="outlined"
+                    required
+                    />
+                    <TextField
+                    name="release_date"
+                    label="Release Date"
+                    defaultValue={movie.release_date}
+                    variant="outlined"
+                    required
+                    />
+                    <TextField
+                    name="duration"
+                    label="Duration"
+                    defaultValue={movie.duration}
+                    variant="outlined"
+                    required
+                    />
+                    <TextField
+                    name="language"
+                    label="Language"
+                    defaultValue={movie.language}
+                    variant="outlined"
+                    required
+                    />
+                    <ListGenresEdit genres={movie.genres} />
+                    <ListActorsEdit actors={movie.actors} />
+                    <DirectorEdit director={movie.director} />
+                    <TextField
+                    name="synopsis"
+                    label="Synopsis"
+                    defaultValue={movie.synopsis}
+                    variant="outlined"
+                    required
+                    />
+                </Stack>
+                </CardContent>
+                <Divider />
+                <CardActions sx={{justifyContent: "center"}}>
+                    <Button type="submit" variant="contained" color="primary" size="small">
+                    Update
+                    </Button>
+                </CardActions>
+                </Form>
+                <Form method="delete">
+                <CardActions sx={{justifyContent: "center"}}>
+                    <Button variant="contained" type="submit" color="error">Delete Movie</Button>
+                </CardActions>
+                </Form>
+                <br/>
+            </Card>
+        </div>
     </>
 }
 
@@ -111,6 +120,7 @@ function DirectorEdit({ director }) {
         label="Director Name"
         defaultValue={director_name}
         variant="outlined"
+        required
         />
         <TextField
         name="director_surname"
@@ -118,6 +128,7 @@ function DirectorEdit({ director }) {
         label="Director Surname"
         defaultValue={director_surname}
         variant="outlined"
+        required
         />
     </Stack>
 }
@@ -141,6 +152,7 @@ function ActorEdit({ actor, index }) {
             value={firstName}
             onChange={e => setFirstName(e.target.value)}
             variant="outlined"
+            required
         />
         <TextField
             name={`actors_surname[${index}]`}
@@ -148,6 +160,7 @@ function ActorEdit({ actor, index }) {
             value={lastName}
             onChange={e => setLastName(e.target.value)}
             variant="outlined"
+            required
         />
     </Stack>
 }
@@ -161,7 +174,9 @@ function ListActorsEdit({ actors }) {
     };
 
     const removeLastActor = () => {
-        setActorList(actorList.slice(0, -1));
+        if (actorList.length > 1) {
+            setActorList(actorList.slice(0, -1));
+        }
     };
 
     return (
@@ -193,6 +208,7 @@ function GenreEdit({ genre, index }) {
     value={genreEdit}
     onChange={e => setGenreEdit(e.target.value)}
     variant="outlined"
+    required
     />;
 }
 
@@ -210,7 +226,7 @@ function ListGenresEdit({ genres }) {
 
     // Function to remove the last genre from the list
     const removeLastGenre = () => {
-        if (genreList.length > 0) {
+        if (genreList.length > 1) {
             setGenreList(genreList.slice(0, -1));
         }
     };
@@ -220,6 +236,7 @@ function ListGenresEdit({ genres }) {
             {genreList.map((genre, index) => (
                 <GenreEdit index={index} genre={genre} key={index}/>
             ))}
+            <br />
             <Button onClick={addGenre}>Add New Genre</Button>
             <Button onClick={removeLastGenre}>Remove Last Genre</Button>
         </div>

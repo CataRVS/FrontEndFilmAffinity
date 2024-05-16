@@ -118,7 +118,7 @@ async function registerUser({ request }) {
   };
   const registerRes = await fetch('http://localhost:8000/filmaffinity/users/', data);
   if (registerRes.ok){
-    return redirect('/users/login/');
+    return redirect('/users/login');
   }
   return {status: registerRes.status};
 }
@@ -134,7 +134,6 @@ async function fetchUserProfile() {
   const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
 
   if (!response.ok){
-    // throw new Error('Error fetching user profile');
     return {status: response.status};
   }
   var data_j = await response.json();
@@ -151,9 +150,9 @@ async function logoutUser() {
   const response = await fetch('http://localhost:8000/filmaffinity/users/logout/', data);
 
   if (!response.ok){
-    throw new Error('Error logging out');
+    return redirect('/users/profile');
   }
-  return redirect('/users/login/');
+  return redirect('/users/login');
 }
 
 async function actionUserProfile({ request }) {
@@ -171,10 +170,10 @@ async function actionUserProfile({ request }) {
   
     const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
     if (!response.ok){
-      throw new Error('Error deleting user profile');
+      return redirect('/users/profile');
     }
     // Redirect to login
-    return redirect('/users/login/?deleted');
+    return redirect('/users/login');
   }
   else {
     const formData = await request.formData();
@@ -188,7 +187,7 @@ async function actionUserProfile({ request }) {
 
     const response = await fetch('http://localhost:8000/filmaffinity/users/info/', data);
     if (!response.ok){
-      throw new Error('Error updating user profile');
+      return redirect('/users/profile');
     }
     // Redirect to profile
     return redirect('/users/profile');
@@ -272,9 +271,9 @@ async function updateMovie({ request }) {
   
     const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`, data);
     if (!response.ok){
-      throw new Error('Error deleting movie');
+      return redirect('/movies/catalog');
     }
-    // Redirect to login
+    // Redirect to catalog
     return redirect('/movies/catalog');
   }
   else {
@@ -312,12 +311,11 @@ async function updateMovie({ request }) {
       release_date: rawMovieData.release_date,
       duration: rawMovieData.duration,
       language: rawMovieData.language,
-      genres: genres,
-      actors: actors,
-      director: director,
+      genres_data: genres,
+      actors_data: actors,
+      director_data: director,
       synopsis: rawMovieData.synopsis
     };
-    console.log(movie);
 
     const data = {
       method: 'PUT',
@@ -328,7 +326,7 @@ async function updateMovie({ request }) {
 
     const response = await fetch(`http://localhost:8000/filmaffinity/movies/${id}/`, data);
     if (!response.ok){
-      throw new Error('Error updating movie');
+      return redirect(`/movies/catalog/${id}`);
     }
     return redirect(`/movies/catalog/${id}`);
   }
@@ -346,7 +344,6 @@ async function createMovie({ request }) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const release_date = `${year}-${month}-${day}`;
-  console.log(release_date);
 
   // Crear la lista de géneros
   const genres = [];
@@ -378,13 +375,12 @@ async function createMovie({ request }) {
     release_date: release_date,
     duration: rawMovieData.duration,
     language: rawMovieData.language,
-    genres: genres,
-    actors: actors,
-    director: director,
+    genres_data: genres,
+    actors_data: actors,
+    director_data: director,
     synopsis: rawMovieData.synopsis
   };
 
-  console.log(movie);
 
   const data = {
     method: 'POST',
@@ -395,7 +391,7 @@ async function createMovie({ request }) {
 
   const response = await fetch('http://localhost:8000/filmaffinity/movies/', data);
   if (!response.ok){
-    throw new Error('Error updating movie');
+    return redirect('/movies/catalog');
   }
-  return redirect(`/movies/catalog/`);
+  return redirect(`/movies/catalog`);
 }

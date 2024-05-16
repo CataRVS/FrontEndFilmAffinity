@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigation, Form, NavLink } from "react-router-dom";
-import './catalog.css';
+import './movie_details.css';
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -7,7 +7,6 @@ import { useAuth } from "../context/AuthContext";
 
 // We create a Card that will hold the user information and the reviews
 function UserInfo({user}) {
-  console.log(user);
   return (
     <div className="card">
       <h1>{user.first_name} {user.last_name}</h1>

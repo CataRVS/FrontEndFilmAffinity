@@ -1,0 +1,38 @@
+.star, .star.full, .star.half, .star.empty {
+  font-size: 1.7em;
+  cursor: pointer;
+}
+
+.star {
+  color: gold; 
+}
+
+.star.full {
+  color: gold;
+}
+
+.star.half {
+  color: gold;
+  position: relative;
+}
+
+.star.empty {
+  color: lightgray;
+}
+
+.star.half::before {
+  content: '★'; 
+  position: absolute;
+  left: 0;
+  color: gold;
+  width: 100%;
+}
+
+.star.half::after {
+  content: '★';
+  color: lightgray;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+}
