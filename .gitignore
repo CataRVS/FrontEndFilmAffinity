@@ -24,3 +24,11 @@ Thumbs.db
 # Temporary files
 *.swp
 *.swo
+
+# Mac OS files
+.AppleDouble
+.LSOverride
+_MACOSX/
+
+# Visual Studio Code files
+.vscode/
