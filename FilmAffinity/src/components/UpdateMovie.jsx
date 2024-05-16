@@ -43,63 +43,67 @@ function UpdateMovie() {
 
     // movie.poster
     return <>
-        <h1>Update Movie</h1>
-        <Card>
-            <Form method="put">
-            <CardContent>
-            <Stack spacing={2}>
-                <TextField
-                name="title"
-                label="Title"
-                defaultValue={movie.title}
-                variant="outlined"
-                required
-                />
-                <TextField
-                name="release_date"
-                label="Release Date"
-                defaultValue={movie.release_date}
-                variant="outlined"
-                required
-                />
-                <TextField
-                name="duration"
-                label="Duration"
-                defaultValue={movie.duration}
-                variant="outlined"
-                required
-                />
-                <TextField
-                name="language"
-                label="Language"
-                defaultValue={movie.language}
-                variant="outlined"
-                required
-                />
-                <ListGenresEdit genres={movie.genres} />
-                <ListActorsEdit actors={movie.actors} />
-                <DirectorEdit director={movie.director} />
-                <TextField
-                name="synopsis"
-                label="Synopsis"
-                defaultValue={movie.synopsis}
-                variant="outlined"
-                required
-                />
-            </Stack>
-            </CardContent>
-            <Divider />
-            <CardActions sx={{justifyContent: "center"}}>
-                <Button type="submit" variant="contained" color="primary" size="small">
-                Update
-                </Button>
-            </CardActions>
-            </Form>
-            <Form method="delete">
-                <Button variant="contained" type="submit" color="error">Delete Movie</Button>
-            </Form>
-            <br/>
-        </Card>
+        <div className="container">
+            <h1>Update Movie</h1>
+            <Card>
+                <Form method="put">
+                <CardContent>
+                <Stack spacing={2}>
+                    <TextField
+                    name="title"
+                    label="Title"
+                    defaultValue={movie.title}
+                    variant="outlined"
+                    required
+                    />
+                    <TextField
+                    name="release_date"
+                    label="Release Date"
+                    defaultValue={movie.release_date}
+                    variant="outlined"
+                    required
+                    />
+                    <TextField
+                    name="duration"
+                    label="Duration"
+                    defaultValue={movie.duration}
+                    variant="outlined"
+                    required
+                    />
+                    <TextField
+                    name="language"
+                    label="Language"
+                    defaultValue={movie.language}
+                    variant="outlined"
+                    required
+                    />
+                    <ListGenresEdit genres={movie.genres} />
+                    <ListActorsEdit actors={movie.actors} />
+                    <DirectorEdit director={movie.director} />
+                    <TextField
+                    name="synopsis"
+                    label="Synopsis"
+                    defaultValue={movie.synopsis}
+                    variant="outlined"
+                    required
+                    />
+                </Stack>
+                </CardContent>
+                <Divider />
+                <CardActions sx={{justifyContent: "center"}}>
+                    <Button type="submit" variant="contained" color="primary" size="small">
+                    Update
+                    </Button>
+                </CardActions>
+                </Form>
+                <Form method="delete">
+                <CardActions sx={{justifyContent: "center"}}>
+                    <Button variant="contained" type="submit" color="error">Delete Movie</Button>
+                </CardActions>
+                </Form>
+                <br/>
+            </Card>
+        </div>
     </>
 }
 
