@@ -5,39 +5,48 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { Form, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 
-function Review({review}){
+function Review({review}) {
   return (
-      <div className="card">
-        <strong>User: </strong>{review.user}
-        <br/>
-        <strong>Rating: </strong>{review.rating}
-        <br/>
-        {review.comment !== "" && <><strong>Review: </strong>{review.comment}</>}
-      </div>
-  )
+    <Card variant="outlined" sx={{ marginBottom: 2, backgroundColor: "#f9f9f9" }}>
+      <CardContent>
+        <Typography variant="subtitle1" component="h3">
+          <strong>{review.user}</strong>
+        </Typography>
+        <Typography variant="body2" component="p">
+          <strong>Rating:</strong> {review.rating}
+        </Typography>
+        <Typography variant="body2" component="p">
+          {review.comment && <><strong>Review:</strong> {review.comment}</>}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
 }
 
-function ReviewList({reviews, showReviews, toggleReviews}){
+
+function ReviewList({reviews, showReviews, toggleReviews}) {
   return (
     <>
-      <button onClick={toggleReviews}>{showReviews ? "Hide Reviews" : "Show Reviews"}</button>
-      {showReviews &&
-      <div className="reviews">
-        {reviews.map(review => (
-          <div key={review.id} className="review">
-            <Review review={review}/>
-          </div>
-        ))}
+      {showReviews && (
+        <div className="reviews">
+          {reviews.map(review => (
+            <Review key={review.id} review={review}/>
+          ))}
+        </div>
+      )}
+      <div className="button-container">
+        <Button onClick={toggleReviews}>
+            {showReviews ? "Hide Reviews" : "Show Reviews"}
+        </Button>
       </div>
-      }
     </>
-  )
+  );
 }
-
 
 function CreateNewReview({newReview, setNewReview, hasReviewed}){
   const handleChange = (event) => {
@@ -49,11 +58,10 @@ function CreateNewReview({newReview, setNewReview, hasReviewed}){
     setNewReview({...newReview, [name]: value});
   }
 
-
   return (
     <>
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <Card variant="outlined" sx={{minWidth: '15%'}}>
+        <Card variant="outlined" sx={{ minWidth: '80%', margin: 'auto', padding: '20px' }}>
           <Form method={hasReviewed ? "put" : "post"}>
             <CardContent>
               <Stack direction="column" justifyContent="center" alignItems="center">
@@ -100,7 +108,7 @@ function CreateNewReviewContainer({newReview,
       {/* If we are logged in we can create a review */}
       { isLoggedIn ? 
       <>
-        <h2>Add a new review</h2>
+        <h3 className="review">Add a new review</h3>
         <CreateNewReview newReview={newReview} setNewReview={setNewReview} hasReviewed={hasReviewed}/>
       </> : 
       <>
@@ -185,7 +193,7 @@ function MovieReviewsContainer({movie}){
 
   return (
     <>
-      <h2>Reviews</h2>
+      <h3 className="review">Reviews</h3>
       <ReviewList reviews={reviews}
                   showReviews={showReviews}
                   toggleReviews={toggleShowReviews}/>

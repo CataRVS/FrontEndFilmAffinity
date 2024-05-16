@@ -11,7 +11,7 @@ function MovieInfo({movie}) {
       <div className="movie-details" id="movieDetails">
         <img src={movie.poster} alt="Poster" id="poster" />
         <div className="info">
-          <h2 id="title">{movie.title}</h2>
+          <h2 id="title" className="movie-title">{movie.title}</h2>
           <p id="rating">
           <strong>Rating: </strong>
             {movie.average_rating ? parseFloat(movie.average_rating.toFixed(2)) + " / 10": "Not rated"}
@@ -79,12 +79,13 @@ function MovieDetails() {
 
   return (
     <>
-      <div className="container-details">
-        <NavLink to="/movies/catalog" className="boton-volver">Return to Catalog</NavLink>
-
-        { isAdmin && 
-        <NavLink to={`/movies/catalog/edit/${id}`} className="boton-edit">Edit</NavLink> }
+      <div className="container">
         <MovieInfo movie={movie}/>
+        <div className="button-container">
+          <NavLink to="/movies/catalog" className="boton-volver">Return to Catalog</NavLink>
+          { isAdmin && 
+          <NavLink to={`/movies/catalog/edit/${id}`} className="boton-edit">Edit</NavLink> }
+        </div>
         <MovieReviewsContainer movie={movie}/>
       </div>
     </>

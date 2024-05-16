@@ -34,7 +34,7 @@ function UserProfileInformation() {
   checkSession();
   return (
     <>
-      <div className="container-details">
+      <div className="container">
         <UserInfo user={user}/>
       </div>
     </>)

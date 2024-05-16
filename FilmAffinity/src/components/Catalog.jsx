@@ -29,9 +29,8 @@ function ListCatalog({movieList,
                       setLanguageFilter,}){
   const [showFilters, setShowFilters] = useState(false);
   return <>
-    <div className="container-catalog">
+    <div className="container">
       <h2>Movie Catalog</h2>
-      <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
       {showFilters && <FilterList titleFilter={titleFilter}
                                   setTitleFilter={setTitleFilter}
                                   ratingFilter={ratingFilter}
@@ -47,11 +46,12 @@ function ListCatalog({movieList,
                                   languageFilter={languageFilter}
                                   setLanguageFilter={setLanguageFilter}/>
       }
-      <button onClick={() => setShowFilters(!showFilters)}>
+      <button className="button" onClick={() => setShowFilters(!showFilters)}>
         {showFilters ? 'Hide Filters' : 'Show Filters'}
       </button>
       <br/>
       <MovieList movieList={movieList}/>
+      <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
     </div>
   </>
 }
@@ -92,7 +92,7 @@ function PageFilter({currentPage, setCurrentPage}) {
     setCurrentPage(page);
   }
   return <>
-    <div className="buttons">
+    <div className="paginator">
       <button onClick={() => changePage(currentPage - 1)} disabled={currentPage==INITIAL_PAGE}>&lt;</button>
       <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/>
       <button onClick={() => changePage(currentPage + 1)} disabled={currentPage==Math.ceil(total_products / PAGE_SIZE)}>&gt;</button>

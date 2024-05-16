@@ -28,7 +28,7 @@ export default function AddMovie() {
     };
 
     return (<>
-        <div className="container-catalog">
+        <div className="container">
             <h2>Create Movie</h2>
             <Form method="post" encType="multipart/form-data">
                 <CardContent>

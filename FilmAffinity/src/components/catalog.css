@@ -5,8 +5,8 @@ body {
     padding: 0;
 }
 
-.container-catalog {
-    max-width: 1000px;
+.container {
+    max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
@@ -63,6 +63,62 @@ h2 {
     background: white;
     text-align: center;
 }
+
+.movie-info:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+
+.button {
+    background-color: #4CAF50; 
+    color: white; 
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition-duration: 0.4s;
+}
+
+.button:hover {
+    background-color: #45a049;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+
+.paginator {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.paginator button, .paginator input {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.paginator button:hover, .paginator input[type="number"]:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.paginator input[type="number"] {
+    width: 40px;
+    text-align: center;
+}
+
+
 
 
 #title {
@@ -137,21 +193,3 @@ a {
     text-decoration: none;
     color: #000000;
 }
-
-.boton-volver {
-    background-color: #67b5ff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 3px;
-    float: right;
-}
-
-.boton-edit {
-    background-color: #00cc00;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 3px;
-    float: right;
-  }
