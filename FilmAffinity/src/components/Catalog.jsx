@@ -4,6 +4,8 @@ import './catalog.css';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+import RatingStars from './RatingStars';
+
 
 const PAGE_SIZE = 9;
 const INITIAL_PAGE = 1;
@@ -30,7 +32,7 @@ function ListCatalog({movieList,
   const [showFilters, setShowFilters] = useState(false);
   return <>
     <div className="container">
-      <h2>Movie Catalog</h2>
+      <h1>Movie Catalog</h1>
       {showFilters && <FilterList titleFilter={titleFilter}
                                   setTitleFilter={setTitleFilter}
                                   ratingFilter={ratingFilter}
@@ -131,8 +133,10 @@ function Movie({movie}) {
       <img src={movie.poster} alt="Poster" id="thumbnail" />
       <div className="info">
         <h3 id="title">{movie.title}</h3>
+        {movie.average_rating ? <RatingStars rating={parseFloat(movie.average_rating.toFixed(2))} /> : 
+                                <RatingStars rating={0} />}
         <p>
-          <strong>Rating: </strong>
+          {/* <strong>Rating: </strong> */}
           {/* If the movie has no rating, it will be "Not rated" */}
           {/* If the movie has a rating, it will be shown with two decimals */}
           {/* toFixed(2) returns a string, and numbers such as 7 are turned into 7.00 */}

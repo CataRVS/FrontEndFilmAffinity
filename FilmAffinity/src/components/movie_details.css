@@ -1,6 +1,6 @@
 h3.review{
     text-align: left;
-    margin: 15px;
+    margin: 15px 15px 0px;
 }
 
 
@@ -13,8 +13,8 @@ h3.review{
 }
 
 .info {
-    margin: 5px 20px;
-    padding: 5px 20px;
+    margin: 0px 20px;
+    padding: 0px 20px;
 }
 
 
@@ -39,6 +39,12 @@ h3.review{
     line-height: 1.5; /* Espacio de línea para mejorar la legibilidad */
 }
 
+#poster-details {
+    width: 25%;
+    height: auto;
+    margin-right: 20px;
+    border-radius: 5px;
+}
 
 
 .boton-volver, .boton-edit {
@@ -79,4 +85,15 @@ h3.review{
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
     padding: 16px;
+}
+
+
+.genre-badge {
+    display: inline-block;
+    background-color: #eef;
+    color: #333;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 14px;
 }

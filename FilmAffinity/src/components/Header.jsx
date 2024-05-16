@@ -18,7 +18,10 @@ export default function Header() {
 
     return (
         <header>
-            <h1>FilmAffinity</h1>
+            <h1>
+                <span class="film-text">Film</span><span class="affinity-text">Affinity</span>
+            </h1>
+
             <nav>
                 <ul>
                     <li className="header-element">
