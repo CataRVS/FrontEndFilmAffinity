@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigation, Form, NavLink } from "react-router-dom";
-import './catalog.css';
+import './movie_details.css';
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -34,7 +34,7 @@ function UserProfileInformation() {
   checkSession();
   return (
     <>
-      <div className="container">
+      <div className="container-details">
         <UserInfo user={user}/>
       </div>
     </>)

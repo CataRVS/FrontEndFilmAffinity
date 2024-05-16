@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 9;
 const INITIAL_PAGE = 1;
 var total_products = 16;
 
@@ -28,7 +28,7 @@ function ListCatalog({movieList,
                       languageFilter,
                       setLanguageFilter,}){
   return <>
-    <div className="container">
+    <div className="container-catalog">
       <h2>Movie Catalog</h2>
       <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
       <FilterList titleFilter={titleFilter}
@@ -120,10 +120,10 @@ function MovieFilter({filterName, movieFilter, setMovieFilter}){
 
 function Movie({movie}) {
   return <>
-    <div className="movie-details" id="movieDetails">
+    <div className="movie-info" id="movieDetails">
       <img src={movie.poster} alt="Poster" id="thumbnail" />
       <div className="info">
-        <h2 id="title">{movie.title}</h2>
+        <h3 id="title">{movie.title}</h3>
         <p>
           <strong>Rating: </strong>
           {/* If the movie has no rating, it will be "Not rated" */}
@@ -143,7 +143,7 @@ function MovieList({movieList = []}) {
   return <>
     <div id="movieList">
       {movieList.map((movie) => (
-        <NavLink to={`/movies/catalog/${movie.id}`} key={movie.id}>
+        <NavLink to={`/movies/catalog/${movie.id}`} key={movie.id} className="go-to-movie">
           <Movie key={movie.id} movie={movie} />
         </NavLink>
       ))}

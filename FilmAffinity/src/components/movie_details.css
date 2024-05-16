@@ -1,0 +1,32 @@
+.container-details {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-details {
+    display: flex;
+    margin-top: 20px;
+}
+
+
+.boton-volver {
+    background-color: #67b5ff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    float: right;
+}
+
+.boton-edit {
+    background-color: #00cc00;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    float: right;
+  }

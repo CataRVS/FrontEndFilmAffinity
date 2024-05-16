@@ -13,16 +13,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-header {
-  background-color: #333;
-  color: #fff;
-  padding: 10px 20px;
-  text-align: left; 
-}
-
-header h1 {
-margin: 0;
-}
 
 h1 {
   font-size: 3.2em;

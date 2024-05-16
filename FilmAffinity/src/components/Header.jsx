@@ -22,24 +22,30 @@ export default function Header() {
             <nav>
                 <ul>
                     <li>
-                        <NavLink to="/movies/catalog">Movies</NavLink>
+                        <NavLink className="header-link" to="/movies/catalog">Movies</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/moreInfo">About us</NavLink>
+                        <NavLink className="header-link" to="/moreInfo">About us</NavLink>
                     </li>
+                    {/*If we are admin we can also add movies and get a tab for that*/}
+                    {isAdmin && (
+                        <li>
+                            <NavLink className="header-link" to="/movies/add">Add Movie</NavLink>
+                        </li>
+                    )}
                     {isLoggedIn && (
                         <li onClick={toggleDropdown}>
-                            <span>Profile</span>
+                            <span className="header-link">Profile</span>
                             {showDropdown && (
                                 <ul className="dropdown-menu">
                                     <li>
-                                        <NavLink to="/users/profile">My Profile</NavLink>
+                                        <NavLink className="header-link" to="/users/profile">My Profile</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/users/edit-profile">Edit Profile</NavLink>
+                                        <NavLink className="header-link" to="/users/edit-profile">Edit Profile</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/users/reviews">My Reviews</NavLink>
+                                        <NavLink className="header-link" to="/users/reviews">My Reviews</NavLink>
                                     </li>
                                 </ul>
                             )}
@@ -47,14 +53,7 @@ export default function Header() {
                     )}
                     {!isLoggedIn && (
                         <li>
-                            <NavLink to="/users/login">Login</NavLink>
-                        </li>
-                    )}
-
-                    {/*If we are admin we can also add movies and get a tab for that*/}
-                    {isAdmin && (
-                        <li>
-                            <NavLink to="/movies/add">Add Movie</NavLink>
+                            <NavLink className="header-link" to="/users/login">Login</NavLink>
                         </li>
                     )}
                 </ul>

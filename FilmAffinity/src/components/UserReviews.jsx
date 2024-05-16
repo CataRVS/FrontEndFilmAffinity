@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigation, NavLink } from "react-router-dom";
-import './catalog.css';
+import './movie_details.css';
 import { useAuth } from "../context/AuthContext";
 
 function Review({review}){
@@ -38,7 +38,7 @@ function UserReviews() {
     checkSession();
     return (
         <>
-        <div className="container">
+        <div className="container-details">
             <h1>My Reviews</h1>
             <ReviewList reviews={ratings}/>
         </div>

@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import MovieReviewsContainer from './MovieReviews';
 import { useAuth } from '../context/AuthContext';
 import { useLoaderData, useNavigation, Form } from "react-router-dom";
+import './movie_details.css';
 
 function MovieInfo({movie}) {
     return <>
@@ -78,7 +79,7 @@ function MovieDetails() {
 
   return (
     <>
-      <div className="container">
+      <div className="container-details">
         <NavLink to="/movies/catalog" className="boton-volver">Return to Catalog</NavLink>
 
         { isAdmin && 
