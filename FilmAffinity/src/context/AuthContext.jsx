@@ -47,7 +47,6 @@ export const AuthProvider = ({ children }) => {
             else {
                 throw new Error('Failed to check if user is admin');
             }
-            console.log('Is admin:', isAdmin);
 
         } catch (error) {
             console.error('Failed to check session', error);

@@ -41,7 +41,7 @@ export default function AddMovie() {
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 name="release_date"
-                                label="Release Date"
+                                label="Release Date *"
                                 value={releaseDate}
                                 onChange={handleDateChange}
                                 renderInput={(params) => <TextField {...params} />}

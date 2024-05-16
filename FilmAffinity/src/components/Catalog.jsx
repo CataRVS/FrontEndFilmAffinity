@@ -121,7 +121,7 @@ function MovieFilter({filterName, movieFilter, setMovieFilter}){
 function Movie({movie}) {
   return <>
     <div className="movie-details" id="movieDetails">
-      <img src={movie.poster} alt="Thumbnail" id="thumbnail" />
+      <img src={movie.poster} alt="Poster" id="thumbnail" />
       <div className="info">
         <h2 id="title">{movie.title}</h2>
         <p>

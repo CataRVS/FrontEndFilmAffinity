@@ -316,7 +316,6 @@ async function updateMovie({ request }) {
       director_data: director,
       synopsis: rawMovieData.synopsis
     };
-    console.log(movie);
 
     const data = {
       method: 'PUT',
@@ -382,7 +381,6 @@ async function createMovie({ request }) {
     synopsis: rawMovieData.synopsis
   };
 
-  console.log(movie);
 
   const data = {
     method: 'POST',

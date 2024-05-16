@@ -17,8 +17,6 @@ const PrivateRoute = ({ children }) => {
 const PrivateAdminRoute = ({ children }) => {
     const { isLoggedIn, isAdmin, checkSession } = useAuth();
     checkSession();
-    console.log("IS ADMIN");
-    console.log(isAdmin);
 
     if (!isAdmin) {
         // Redirigir a la página de login
